@@ -1,12 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+
+import Login from './component/Authentication/login';
+import Register from './component/Authentication/register';
+import Footer from './component/nav-footer/footer';
+import Nav from './component/nav-footer/nav';
 
 function App() {
+  {
+
+  }
   return (
-    <div className="flex  justify-between font-bold">
-      <p>hrlrlll</p>
-      <p>hrlrlll</p>
-     
+    <div className="bg-red-400 ">
+   {/* <Register/>\
+   nhellooooooooooooooooooooo
+   <Login/> */}
+   {/* <Nav/> */}
+   <Footer/>   
     </div>
   );
 }
