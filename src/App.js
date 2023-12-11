@@ -1,20 +1,15 @@
-
-import Login from './component/Authentication/login';
-import Register from './component/Authentication/register';
-import Footer from './component/nav-footer/footer';
-import Nav from './component/nav-footer/nav';
+import Login from "./component/Authentication/login";
+import Register from "./component/Authentication/register";
+import Layout from "./component/layout/layout";
+import Home from "./component/pages/Home/Home";
 
 function App() {
   {
-
   }
   return (
-    <div className="bg-red-400 ">
-   {/* <Register/>\
-   nhellooooooooooooooooooooo
-   <Login/> */}
-   {/* <Nav/> */}
-   <Footer/>   
+    <div className="flex flex-col justify-center items-center bg-white ">
+      {/* <Layout /> */}
+      <Home/>
     </div>
   );
 }
