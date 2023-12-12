@@ -24,14 +24,27 @@ export default function CompanyReg() {
     { title: "Hospital / Clinic", image: cr7 },
     { title: "Agricultural Farm", image: cr7 },
     { title: "Montessori / College", image: cr7 },
-    { title: "Auto Servicing, Reconditio", image: cr7 },
+    { title: "Auto Servicing, Recondition", image: cr7 },
   ];
 
   return (
-    <div className="flex flex-col gap-4">
-      {demo().map((hello) => (
-        <span key={hello.title}>{hello.title}{hello.image}</span>
-      ))}
+    <div className="pl-16 flex flex-col justify-center items-center py-12 px-24 gap-12 bg-[#F2F5FF]">
+      <div className="flex flex-col justify-center text-center text-[#092169]  gap-3 font-normal ">
+        <span className="text-3xl font-bold ">
+          Company registration for any industry{" "}
+        </span>
+        <span>
+          Let us handle the registration so you can focus on your business.
+        </span>
+      </div>
+      <div className=" flex flex-wrap w-3/4 justify-center  ">
+        {demo().map((demo) => (
+          <span className="flex  flex-col gap-3 mb-8 w-[215px] mr-6 justify-center items-center py-7 bg-white border-[1px] border-[#C5C5C5] rounded-xl">
+            <img src={demo.image} alt="" srcset="" className="w-[65px] h-[65px]" />
+            <span  className="font-normal" key={demo.title}>{demo.title}</span>
+          </span>
+        ))}
+      </div>
     </div>
   );
 }

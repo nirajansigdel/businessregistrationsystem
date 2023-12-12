@@ -3,7 +3,7 @@ import hero1 from "./image/hero1.png";
 
 export default function Stream() {
   return (
-    <div className="my-0.5 flex w-[1460px] px-24 py-6  gap-48">
+    <div className="mt-0.5 flex w-[1460px] px-24 py-6  gap-48 ">
         <img
           src={hero1}
           alt=""

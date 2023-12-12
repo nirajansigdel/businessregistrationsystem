@@ -7,7 +7,7 @@ import Footer from "../nav-footer/footer";
   return( 
     <div className="w-full max-w-[1440px]">
         <Nav />
-        <div className="">
+        <div className="flex flex-col gap-12 bg-[#F2F5FF]">
             {children}
             </div>
             <Footer/>

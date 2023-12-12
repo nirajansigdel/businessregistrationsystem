@@ -8,8 +8,9 @@ function App() {
   }
   return (
     <div className="flex flex-col justify-center items-center bg-white ">
-      {/* <Layout /> */}
-      <Home/>
+     {/* <Login/>
+     <Register/>
+      <Home/> */}
     </div>
   );
 }

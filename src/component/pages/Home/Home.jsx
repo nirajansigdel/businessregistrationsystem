@@ -5,6 +5,8 @@ import HeroSection from "./herosection";
 import Stream from "./stream";
 import Grule from "./rule";
 import CompanyReg from "./companyreg";
+import WhyChoose from "./whychoose";
+import OurTeam from "./ourteam";
 
 
 
@@ -13,8 +15,10 @@ export default function Home() {
     <Layout>
       <HeroSection/>
       <Stream/>
-      <Grule/>
       <CompanyReg/>
+      <WhyChoose/>
+      <Grule/>
+    <OurTeam/>
       
     </Layout>
   );
