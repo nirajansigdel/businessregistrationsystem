@@ -12,15 +12,15 @@ export default function Register() {
       <div className="flex flex-col justify-center items-center gap-5">
         <p className="flex gap-1 flex-col">
           <span className="flex font-medium "> Email/Username</span>
-          <input type="text" placeholder="demo@gamil.com" className="w-[25vw] py-2 rounded-md pl-2 outline-none"/>
+          <input type="text" placeholder="Enter Your Name" className="w-[25vw] py-2 rounded-md pl-2 outline-none"/>
         </p>
         <p className="flex gap-1 flex-col ">
           <span classNampe="flex font-medium "> Password</span>
-          <input type="password" placeholder="********" className="w-[25vw] py-2 rounded-md pl-2  outline-none" />
+          <input type="password" placeholder="Enter Your Password" className="w-[25vw] py-2 rounded-md pl-2  outline-none" />
         </p>
         <p className="flex gap-1 flex-col ">
           <span classNampe="flex font-medium "> Confirm Password</span>
-          <input type="password" placeholder="********" className="w-[25vw] py-2 rounded-md pl-2  outline-none" />
+          <input type="password" placeholder="Confirm Password" className="w-[25vw] py-2 rounded-md pl-2  outline-none" />
         </p>
 
       <input type="button" value="Register" className="w-[25vw] rounded-md pl-2 outline-none  bg-[#2C3A64] py-2 text-white hover:text-slate-200" />

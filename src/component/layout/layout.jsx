@@ -1,4 +1,3 @@
-import { CiLollipop } from "react-icons/ci";
 import Nav from "../nav-footer/nav";
 import Footer from "../nav-footer/footer";
 
