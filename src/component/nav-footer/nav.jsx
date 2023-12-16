@@ -8,7 +8,8 @@ export default function Nav() {
       <ul className="flex gap-7 font-medium cursor-pointer font-white ">
         <li><Link to="/">Home</Link></li>
         <li><Link to="/notice"> Notice</Link></li>
-        <li><Link to="/darta">Darta</Link></li>
+        {/* <li><Link to="/darta">Admindash</Link></li> */}
+        <li><Link to="/usermain">Udash</Link></li>
         <li><Link to='/about'>About us</Link></li>
       </ul>
       <div className="flex gap-6 font-medium cursor-pointer font-white ">
