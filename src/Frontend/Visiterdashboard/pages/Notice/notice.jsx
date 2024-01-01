@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { FaFilePdf } from "react-icons/fa";
-import Layout from "../../layout/layout";
 import n1 from "./image/notice1.jpg";
 import n2 from "./image/notice2.jpg";
 import n3 from "./image/notice3.jpg";
+import Layout from "../../component/layout/layout";
 
 export default function Notice() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -46,6 +46,8 @@ export default function Notice() {
           </span>
         ))}
       </div>
+
+      
     </Layout>
   );
 }

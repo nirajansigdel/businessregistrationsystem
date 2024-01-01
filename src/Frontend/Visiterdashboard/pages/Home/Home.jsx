@@ -1,9 +1,8 @@
 import React from "react";
-import Layout from "../../layout/layout";
-
+import Layout from "../../component/layout/layout";
 import HeroSection from "./herosection";
-import Stream from "./stream";
 import Grule from "./rule";
+import Stream from "./stream";
 import CompanyReg from "./companyreg";
 import WhyChoose from "./whychoose";
 
@@ -17,7 +16,6 @@ export default function Home() {
       <CompanyReg/>
       <WhyChoose/>
       <Grule/>
-      
     </Layout>
   );
 }

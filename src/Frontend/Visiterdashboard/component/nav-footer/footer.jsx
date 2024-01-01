@@ -2,6 +2,7 @@ import React from "react";
 import { CiFacebook } from "react-icons/ci";
 import { CiInstagram } from "react-icons/ci";
 import { CiTwitter } from "react-icons/ci";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -12,18 +13,20 @@ export default function Footer() {
         <div className="flex flex-col gap-2">
           <span className=" font-semibold">Quick Links</span>
           <span className="flex flex-col gap-1 cursor-pointer">
-            <span>About Us</span>
-            <span>Notice</span>
-            <span>Darta</span>
+            <Link to="/">Home</Link>
+            <Link to="/notice">Notice</Link>
+            <Link to="/about">About Us</Link>
+     
+      
           </span>
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 items-center">
           <span className=" font-semibold">Contact US</span>
-          <span className="flex flex-col gap-2">
+          <span className="flex flex-col gap-2 ">
             <span>9840000000</span>
             <span>abc@gmail.com</span>
-            <span>texas</span>
+            <span>Kathmandu ,Nepal</span>
           </span>
         </div>
         <div className="flex flex-col gap-3 ">
