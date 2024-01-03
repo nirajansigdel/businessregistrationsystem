@@ -23,12 +23,12 @@ export default function Nav() {
         </li>
       </ul>
       <div className="flex gap-6 font-medium cursor-pointer font-white ">
-        <span className="font-semibold bg-[#FFBB00]  rounded-md px-2 py-1">
+        <span className="font-semibold  border-2 rounded-md px-2 py-1">
           <Link to="/login" >
             Login
           </Link>
         </span>
-        <span className="font-semibold bg-[#FFBB00]  rounded-md px-2 py-1">
+        <span className="font-semibold border-2 rounded-md px-2 py-1">
           <Link to="/register" >
             Register
           </Link>

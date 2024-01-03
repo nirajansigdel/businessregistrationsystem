@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <div className=" flex flex-col  text-center gap-7 px-24  bg-[#092169] text-white py-5 ">
+    <div className=" flex flex-col  text-center gap-7 px-24  bg-[#092169] text-white py-5  ">
       <div className="flex justify-between ">
         <div className="flex font-extrabold">BRS</div>
 

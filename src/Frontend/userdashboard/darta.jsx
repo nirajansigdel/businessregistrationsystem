@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { MdDeleteForever  } from "react-icons/md";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Ulayout } from "./layout";
 import dartaimage from "./dartaimage.png"
 
@@ -10,6 +12,7 @@ const[address,setaddress]=useState("");
 const[structure,setstructure]=useState("");
 const[phone,setphone]=useState("");
 const[email,setemail]=useState("");
+const[date,setdate]=useState("");
 const[document,setdocument]=useState(null);
 const[detail,setdetail]=useState(false);
 const[previous ,setprevious]=useState(false)
@@ -18,8 +21,8 @@ const[previous ,setprevious]=useState(false)
   setdetail(false);
  }
  const submitconfirm=()=>{
-window.confirm("are you sure to register")
- 
+const isconfirm=window.confirm("are you sure to register")
+
 const data =new FormData();
 data.append("file",document)
 data.append("upload_preset","nirajan");
@@ -34,12 +37,23 @@ fetch("https://api.cloudinary.com/v1_1/dy6obggnf/image/upload",{
 .catch((error)=>{
   console.log(error)
 })
-
+if(isconfirm){
+  setname('')
+  settype('')
+  setstructure('')
+  setphone('')
+  setaddress('')
+  setemail('')
+  setdate("")
+  setdocument("")
+}
+setprevious(false);
+  setdetail(false);
 
  }
 
   const deletedocument=()=>{
-   const confirms=window.confirm("are you sure")
+   const confirms=toast.confirm("are you sure")
    if(confirms){
     setdocument(false)
    }
@@ -47,8 +61,9 @@ fetch("https://api.cloudinary.com/v1_1/dy6obggnf/image/upload",{
   
   }
   const registerbusiness = () => {
-    if (!name || !type || !address || !structure || !phone || !email || !document) {
-      alert("Fields cannot be empty");
+    if (!name || !type || !address || !structure || !phone || !email || !date || !document) {
+   toast.error("Field Cannot be Empty")
+
       return; // Added return to exit the function if any field is empty
     }
  setdetail(true)
@@ -70,15 +85,15 @@ fetch("https://api.cloudinary.com/v1_1/dy6obggnf/image/upload",{
             Company Details
           </div>
           <div className="flex flex-col gap-4 px-2">
-         
             <span className="flex">
-              <span className="flex font-medium  w-[210px]" >  Company Name(English)*  </span>
+              <span className="flex font-medium  w-[210px]" > Company Name(English)*  </span>
               <input
                 type="text"
                 placeholder="Enter Your Name"
                 className="w-[25vw] py-2 rounded-md pl-2 outline-none"
                 value={name} onChange={(e)=>setname(e.target.value)}
               />
+             
           
             </span>
             <span className="flex">
@@ -128,6 +143,17 @@ fetch("https://api.cloudinary.com/v1_1/dy6obggnf/image/upload",{
                 value={email} onChange={(e)=>setemail(e.target.value)}
               />
             </span>
+            <span className="flex">
+              <span className="flex font-medium w-[210px] ">
+                Issues Date* :{" "}
+              </span>
+              <input
+                type="text"
+                placeholder="Enter Your Name"
+                className="w-[25vw] py-2 rounded-md pl-2 outline-none"
+                value={date} onChange={(e)=>setdate(e.target.value)}
+              />
+            </span>
           </div>
         </div>
         <div className="flex flex-col w-[900px] gap-5">
@@ -137,10 +163,16 @@ fetch("https://api.cloudinary.com/v1_1/dy6obggnf/image/upload",{
             {" "}
               <span className="flex  items-center gap-5">
                
-                <span className="w-[100px]">Documnet</span>
+                <span className="w-[100px]">Pan No.</span>
                 <input type="file" onChange={(event) => setdocument(event.target.files[0])} />
 
               </span>
+              <span className="flex  items-center gap-5">
+               
+               <span className="w-[100px]">supported document</span>
+               <input type="file" onChange={(event) => setdocument(event.target.files[0])} />
+
+             </span>
               <p className="font-semibold">You must upload in pdf format with following order  <span className="text-red-300 font-bold px-3">1.pan no</span> <span className="text-blue-600">2.supported Document</span></p>
             
           </div>
@@ -175,6 +207,7 @@ fetch("https://api.cloudinary.com/v1_1/dy6obggnf/image/upload",{
  <span> Company email addrress:<span className="text-red-600 font-bold text-xl">{email}</span></span>
  <span> company address:<span className="text-red-600 font-bold text-xl">{address}</span></span>
  <span> company structure:<span className="text-red-600 font-bold text-xl">{structure}</span></span>
+ <span> Issues Date:<span className="text-red-600 font-bold text-xl"></span>{date}</span>
 </div>
 {document && (
             <div>
@@ -189,13 +222,9 @@ fetch("https://api.cloudinary.com/v1_1/dy6obggnf/image/upload",{
   <button className="py-2 text-xl px-6 font-semibold bg-[#FFBB00] rounded-md" onClick={edit}>Edit</button>
  <button className="py-2 px-6 text-xl font-semibold bg-[#FFBB00]  rounded-md " onClick={submitconfirm}>Confirm </button></div></div>
 
-
-
-
-
-
 </div>
 )}
+<ToastContainer />
    </Ulayout>
    
   );
