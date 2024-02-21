@@ -10,28 +10,32 @@ export default function Register() {
   const [password, setpassword] = useState("");
   const [confirmpassword, setconfirmpassword] = useState("");
   const Register =async (data) => {
-    if (!email || !password || !confirmpassword) {
-      await toast.error("field cannot be empty");
-    }
-    if(password!= confirmpassword){
-      await toast.error("Password must be same")
-
-    }
-    const passwordRegex = /^(?=.*\d)(?=.*[A-Z])(?=.*\W)(?!.*\s).*$/;
-     if(!passwordRegex.test(password)){
-      toast.error(" At least one digit, one uppercase letter, and one special character.")
-     }
     try {
+      // Validate input fields
+      if (!email || !password || !confirmpassword) {
+        throw new Error("Fields cannot be empty");
+      }
+  
+      if (password !== confirmpassword) {
+        throw new Error("Passwords must match");
+      }
+  
+      const passwordRegex = /^(?=.*\d)(?=.*[A-Z])(?=.*\W)(?!.*\s).*$/;
+      if (!passwordRegex.test(password)) {
+        throw new Error("Password must contain at least one digit, one uppercase letter, and one special character.");
+      }
+  
       // Make a POST request to the server's registration endpoint
       await axios.post('http://localhost:3000/api/register', { email, password });
-      await toast.success("Register sucessfully!",{
-       position:"top-center"
-      });
-      window.location='/login' ;    
-      console.log('User registered successfully');
   
-    } 
-    catch (error) {
+      // Display success message
+      toast.success("Registered successfully!", { position: "top-center" });
+  
+      // Redirect to login page
+      window.location = '/login';
+    } catch (error) {
+      // Display error message
+      toast.error(error.message);
       console.error('Error registering user:', error);
     }
 
@@ -60,7 +64,7 @@ export default function Register() {
             <input
               onChange={(e) => setpassword(e.target.value)}
               value={password}
-              type="text"
+              type="password"
               placeholder="Enter Your Password"
               className="w-[25vw] py-2 rounded-md pl-2  outline-none"
             />
@@ -70,9 +74,9 @@ export default function Register() {
             <input
               onChange={(e) => setconfirmpassword(e.target.value)}
               value={confirmpassword}
-              type="text"
+              type="password"
               placeholder="Confirm Password"
-              className="w-[25vw] py-2 rounded-md pl-2  outline-none cursor-pointer"
+              className="w-[25vw] py-2 rounded-md pl-2  outline-none "
             />
           </p>
 

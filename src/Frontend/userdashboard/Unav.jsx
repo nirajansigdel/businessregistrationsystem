@@ -15,7 +15,7 @@ export default function Umain() {
 
   return (
     <div className="flex justify-between bg-[#092169] font-medium  px-5 shadow-xl  py-6 items-center sticky top-0 z-10"> {/* Added 'sticky' and 'top-0' classes */}
-      <span className="font-bold text-white "> User</span>
+      <span className="font-bold text-white ">Client</span>
       <ul className="flex gap-2">
   </ul>
    <div className="flex items-center gap-5">
