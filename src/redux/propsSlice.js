@@ -1,14 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 
-const initialState = {}
+const initialState = {
+    userData: []
+}
 
 const propsSlice = createSlice({
     name: 'propsSlice',
     initialState,
     reducers: {
         addData: (state, action) => {
-            Object.assign(state, action.payload);
+            state.userData = action.payload
+            // Object.assign(state, action.payload);
         },
     },
 });
