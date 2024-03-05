@@ -3,8 +3,7 @@ import { Ulayout } from "./layout";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dartaimage from "./dartaimage.png";
-import { MdDeleteForever } from "react-icons/md";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import ImgCompressor from "./compress";
 
 export default function Udarta() {
   const [name, setname] = useState("");
@@ -16,6 +15,8 @@ export default function Udarta() {
   const [document, setdocument] = useState(null);
   const [detail, setdetail] = useState(false);
   const [previous, setprevious] = useState(false);
+  const [geterror, setGeterror] = useState("");
+  const [compressedImg, setCompressedImg] = useState(null);
 
   // for title only
   const titlename = [
@@ -27,30 +28,21 @@ export default function Udarta() {
     { id: 6, ddate: "Issue Date:" },
   ];
 
-  // const accessdata = [
-  //   { name },
-  //   { type },
-  //   { address },
-  //   { phone },
-  //   { email },
-  //   { date },
-    
-  // ];
-
   const edit = () => {
     setprevious(false);
     setdetail(false);
   };
 
-  const deletedocument = () => {
-    const confirms = window.confirm("Are you sure");
-    if (confirms) {
-      setdocument(null);
-    }
-  };
-
   const registerbusiness = () => {
-    if (!name || !type || !address || !phone || !email || !date || !document) {
+    if (
+      !name ||
+      !type ||
+      !address ||
+      !phone ||
+      !email ||
+      !date ||
+      !compressedImg
+    ) {
       toast.error("Fields cannot be empty");
       return;
     }
@@ -82,7 +74,7 @@ export default function Udarta() {
       try {
         // Upload document to Cloudinary
         const formData = new FormData();
-        formData.append("file", document);
+        formData.append("file", compressedImg);
         formData.append("upload_preset", "nirajan");
         formData.append("cloud_name", "dy6obggnfn");
 
@@ -93,16 +85,13 @@ export default function Udarta() {
             body: formData,
           }
         );
-        console.log(document);
+
         if (!cloudinaryResponse.ok) {
           const cloudinaryErrorData = await cloudinaryResponse.json();
-          console.error("Cloudinary Upload Error:", cloudinaryErrorData);
           return;
         }
 
         const cloudinaryData = await cloudinaryResponse.json();
-        console.log("Cloudinary Upload Response:", cloudinaryData);
-        console.log("sucess");
 
         // Send data to backend
         const backendResponse = await fetch(
@@ -126,8 +115,21 @@ export default function Udarta() {
 
         if (backendResponse.ok) {
           const backendData = await backendResponse.json();
-          console.log("Backend Response:", backendData);
+          toast.error(backendData.message)
 
+          const dartaData = await fetch(
+            `http://localhost:3000/api/getDartaById/${backendData.data}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const darta= await dartaData.json()
+          console.log("Backend Response:", darta);
+          localStorage.setItem("dartaDetails", JSON.stringify(darta.data));
+          localStorage.setItem("phone", phone);
           // Clear form data if the backend operation is successful
           setname("");
           settype("");
@@ -139,12 +141,14 @@ export default function Udarta() {
           setprevious(false);
           setdetail(false);
         } else {
-          console.error("Backend Error:", backendResponse.statusText);
+          toast.error("Phone number must be unique");
         }
       } catch (error) {
-        console.error("Error:", error);
+        console.log("bro where ?");
       }
     }
+
+    // -----------------------image compressor-------------------
   };
 
   return (
@@ -238,20 +242,27 @@ export default function Udarta() {
                 </span>
               </div>
             </div>
-            <div className="flex flex-col"></div>
             <div className="flex flex-col w-[900px] gap-5">
               <div className="bg-[#092169] text-white px-2 py-3">
                 Your document
               </div>
-              <div className="flex flex-col px-2 gap-4">
+              <div className="flex flex-col px-2 ">
                 {" "}
                 <span className="flex  items-center gap-5">
-                  <span className="w-[100px]">Pan No.</span>
-                  <input
+                  {/* <input
                     type="file"
                     onChange={(event) => setdocument(event.target.files[0])}
-                    className=" aspect-square object-contain"
+                    
+                  /> */}
+
+                  <ImgCompressor
+                    setCompressedFile={(file) => setCompressedImg(file)}
                   />
+
+                  {/* <MdDeleteForever
+                    className="w-[34px] h-[34px]  cursor-pointer hover:text-red-700"
+                    onClick={deletedocument}
+                  /> */}
                 </span>
               </div>
             </div>
@@ -262,10 +273,6 @@ export default function Udarta() {
               <div className="flex flex-col bg-white py-5 px-2 w-[900px] gap-5">
                 <div className="flex justify-between">
                   <span>{document ? document.name : "No file selected"}</span>
-                  <MdDeleteForever
-                    className="w-[34px] h-[34px]  cursor-pointer hover:text-red-700"
-                    onClick={deletedocument}
-                  />
                 </div>
               </div>
             </div>
@@ -280,8 +287,7 @@ export default function Udarta() {
         </>
       ) : (
         <div className="flex mx-10 px-3 my-2 flex-col gap-7 justify-center items-center bg-white ">
-          <div>
-          </div>
+          <div></div>
           <div className="flex gap-16 w-[1200px] p-3">
             <div className="w-full">
               <div>
@@ -291,7 +297,7 @@ export default function Udarta() {
                     {titlename.map((details) => (
                       <div
                         key={details.id}
-                        className="w-[150px] justify-center flex flex-col gap-[5px] "
+                        className="w-[150px] justify-center flex flex-col gap-[6px] font-medium "
                       >
                         <p>{details.dname}</p>
                         <p>{details.dtype}</p>
@@ -304,15 +310,14 @@ export default function Udarta() {
                   </div>
                   <div>
                     {/* {accessdata.map((items) => (  ))} */}
-                      <div className="flex justify-center flex-col gap-7 ">
-                        <span className="border-2 ">{name}</span>
-                        <p className="border-2  ">{type}</p>
-                        <p className=" border-2 " >{address}</p>
-                        <p className="border-2  ">{phone}</p>
-                        <p className="border-2   ">{email}</p>
-                        <p className="border-2 ">{date}</p>
-                      </div>
-                  
+                    <div className="flex justify-center flex-col gap-8 w-[400px] ">
+                      <p className="border-2 px-2 ">{name}</p>
+                      <p className="border-2  px-2  ">{type}</p>
+                      <p className=" border-2 px-2  ">{address}</p>
+                      <p className="border-2  px-2  ">{phone}</p>
+                      <p className="border-2  px-2   ">{email}</p>
+                      <p className="border-2 px-2  ">{date}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -321,13 +326,13 @@ export default function Udarta() {
                   Document
                 </div>
                 <div className="flex justify-center">
-                  {document && (
+                  {compressedImg && (
                     <div>
                       <img
-                        src={URL.createObjectURL(document)}
+                        src={URL.createObjectURL(compressedImg)}
                         alt="Selected Document"
                         className="p-5"
-                       style={{ maxHeight: "500px", maxWidth:"700px" }}
+                        style={{ maxHeight: "500px", maxWidth: "700px" }}
                       />
                     </div>
                   )}

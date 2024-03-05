@@ -10,7 +10,8 @@ const propsSlice = createSlice({
     initialState,
     reducers: {
         addData: (state, action) => {
-            state.userData = action.payload
+            // state.userData = action.payload
+            state.userData.push(action.payload)
             // Object.assign(state, action.payload);
         },
     },

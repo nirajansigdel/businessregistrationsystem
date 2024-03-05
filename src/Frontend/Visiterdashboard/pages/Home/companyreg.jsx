@@ -40,8 +40,15 @@ export default function CompanyReg() {
       <div className=" flex flex-wrap w-3/4 justify-center  ">
         {demo().map((demo) => (
           <span className="flex  flex-col gap-3 mb-8 w-[215px] mr-6 justify-center items-center py-7 bg-white border-[1px] border-[#C5C5C5] rounded-xl">
-            <img src={demo.image} alt="" srcset="" className="w-[65px] h-[65px]" />
-            <span  className="font-normal" key={demo.title}>{demo.title}</span>
+            <img
+              src={demo.image}
+              alt=""
+              srcset=""
+              className="w-[65px] h-[65px]"
+            />
+            <span className="font-normal" key={demo.title}>
+              {demo.title}
+            </span>
           </span>
         ))}
       </div>

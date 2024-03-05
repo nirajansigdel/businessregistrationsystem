@@ -1,7 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export default function NoPages() {
-  return (
-    <div>nopages has found</div>
-  )
+  return <div>nopages has found</div>;
 }

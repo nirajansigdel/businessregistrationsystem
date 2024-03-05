@@ -6,16 +6,14 @@ import Stream from "./stream";
 import CompanyReg from "./companyreg";
 import WhyChoose from "./whychoose";
 
-
-
 export default function Home() {
   return (
     <Layout>
-      <HeroSection/>
-      <Stream/>
-      <CompanyReg/>
-      <WhyChoose/>
-      <Grule/>
+      <HeroSection />
+      <Stream />
+      <CompanyReg />
+      <WhyChoose />
+      <Grule />
     </Layout>
   );
 }

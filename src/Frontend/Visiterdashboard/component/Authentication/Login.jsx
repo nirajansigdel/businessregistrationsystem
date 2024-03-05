@@ -23,11 +23,11 @@ export default function Login() {
         email,
         password,
       });
-      const userRole = response.data.role;
+      const userRole = response.data.userDetail.role;
       setRole(userRole);
-      console.log(email, password, userRole);
+      localStorage.setItem("userProfile", JSON.stringify(response.data.userDetail))
       toast.success(" sucessfully!");
-      if (userRole == "Admin") {
+      if (userRole === "Admin") {
         window.location = "/admin";
         return;
       } else {
@@ -59,18 +59,20 @@ export default function Login() {
           <p className="flex gap-1 flex-col ">
             <span className="flex font-medium "> Password</span>
             <div className=" w-[25vw] rounded-md bg-white ">
-            <input
-        type={showPassword ? 'text' : 'password'}
-        value={password}
-        onChange={(e) => setpassword(e.target.value)}
-        className="w-[23vw] py-2 rounded-md pl-2 mr-3 outline-none"
-
-      />
-        <button onClick={togglePasswordVisibility}>
-        {showPassword ? <FaEyeSlash className="pr-1" /> : <FaEye className="pr-1"/>}
-      </button>
-      </div>
-            
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setpassword(e.target.value)}
+                className="w-[23vw] py-2 rounded-md pl-2 mr-3 outline-none"
+              />
+              <button onClick={togglePasswordVisibility}>
+                {showPassword ? (
+                  <FaEyeSlash className="pr-1" />
+                ) : (
+                  <FaEye className="pr-1" />
+                )}
+              </button>
+            </div>
           </p>
 
           <input

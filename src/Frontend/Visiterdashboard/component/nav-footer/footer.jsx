@@ -16,8 +16,6 @@ export default function Footer() {
             <Link to="/">Home</Link>
             <Link to="/notice">Notice</Link>
             <Link to="/about">About Us</Link>
-     
-      
           </span>
         </div>
 
@@ -38,7 +36,9 @@ export default function Footer() {
           </span>
         </div>
       </div>
-      <div className="">@2023 Business registration system |All Right Reserved.</div>
+      <div className="">
+        @2023 Business registration system |All Right Reserved.
+      </div>
     </div>
   );
 }

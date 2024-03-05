@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Nav() {
-  const [navactive, setnavactive] = useState("");
+  const { pathname } = useLocation();
+  console.log(pathname);
   return (
     <div className="flex justify-between bg-[#092169] px-24 py-10 items-center text-white text-center">
       <span className="font-extrabold">Logo</span>
@@ -11,9 +12,8 @@ export default function Nav() {
           <Link
             to="/"
             className={`${
-              navactive === "home" ? "text-red-500" : "text-white"
+              pathname === "/" ? "text-yellow-500 font-bold" : "text-white"
             }`}
-            onClick={() => setnavactive("home")}
           >
             Home
           </Link>
@@ -22,9 +22,10 @@ export default function Nav() {
           <Link
             to="/notice"
             className={`${
-              navactive === "notice" ? "text-red-500" : "text-white"
+              pathname.includes("notice")
+                ? "text-yellow-500 font-bold"
+                : "text-white"
             }`}
-            onClick={() => setnavactive("notice")}
           >
             Notice
           </Link>
@@ -33,9 +34,10 @@ export default function Nav() {
           <Link
             to="/about"
             className={`${
-              navactive === "About" ? "text-red-500" : "text-white"
+              pathname.includes("about")
+                ? "text-yellow-500 font-bold "
+                : "text-white"
             }`}
-            onClick={() => setnavactive("About")}
           >
             About us
           </Link>

@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { addData } from "../../../redux/propsSlice";
 import { FaTimes } from "react-icons/fa";
 import axios from "axios";
+import VerifyRegistration from "../../VerifyRegistration";
 
 export default function Adarta() {
   const dispatch = useDispatch();
@@ -16,29 +17,25 @@ export default function Adarta() {
 
   const [rMessage, setRmessage] = useState("");
 
-  console.log(rMessage);
-  const rejectmessage = async () => {
-
+  const rejectmessage = async (id) => {
     try {
-      const res = await axios.post(" http://localhost:3000/api/verify-darta", {
+      await axios.post("http://localhost:3000/api/verify-darta", {
         mobileNumber: selectedItem.Phone,
         status: "0",
         rejectionMessage: rMessage,
       });
 
+      setActivate(false);
 
-
-
-      console.log(res, "response");
-      setActivate(false)
-    } catch (error) {
-      console.log(error);
-    }
+      const filteredArray = displayArray.filter((val) => val.id !== id);
+      setSelectedItem(null);
+      setDisplayArray(filteredArray);
+      // updateBackend(filteredArray);
+    } catch (error) {}
   };
 
   const Rejectcancel = () => {
     setActivate(false);
-    console.log("what pro");
   };
   const titlename = [
     { id: 1, dname: "Company Name:" },
@@ -56,7 +53,7 @@ export default function Adarta() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/getdarta");
+        const response = await fetch("http://localhost:3000/api/getUnverifiedDarta");
         if (response.ok) {
           const data = await response.json();
           setItems(data); // Update state with dataResults array
@@ -72,7 +69,6 @@ export default function Adarta() {
     fetchData();
   }, []);
 
-  console.log(displayArray);
   const sendto = () => {
     setStep(1);
     setSelectedItem(null);
@@ -85,43 +81,63 @@ export default function Adarta() {
     setShowRejectSection(true);
   };
 
-  const updateBackend = async (data) => {
-    try {
-      const backendResponse = await fetch(
-        "http://localhost:3000/api/verify-darta",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const updateBackend = async (data) => {
+  //   try {
+  //     const backendResponse = await fetch(
+  //       "http://localhost:3000/api/verify-darta",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(data),
+  //       }
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const handleAccept = async(id) => {
+  // const requests = [
+  //   axios.post("http://localhost:3000/api/verify-darta", {
+  //     mobileNumber: selectedItem.Phone,
+  //     status: "0",
+  //     rejectionMessage: rMessage,
+  //   }),
 
+  //   axios.post("http://localhost:3000/api/verify-darta", {
+  //     mobileNumber: selectedItem.Phone,
+  //     status: "1",
+  //   })
+  // ];
+
+  // const endRes = await Promise.all(requests);
+  // console.log(endRes)
+
+  const handleAccept = async (id) => {
+    console.log(selectedItem.Phone);
     try {
-      const res = await axios.post(" http://localhost:3000/api/verify-darta", {
+      await axios.post("http://localhost:3000/api/verify-darta", {
         mobileNumber: selectedItem.Phone,
-        status: "0",
-        rejectionMessage: rMessage,
+        status: "1",
+        rejectionMessage: "",
       });
+      // const res = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
 
-      console.log(res, "accepted response");
-      setActivate(false)
+      // console.log(res, "pulled one");
+      // const resArr = res.data;
+      // const latesetData = resArr.pop();
+      // console.log(latesetData, "latest");
+      setActivate(false);
     } catch (error) {
       console.log(error);
     }
 
     dispatch(addData(selectedItem));
-    const filteredArray = items.filter((val) => val.id !== id);
+    const filteredArray = displayArray.filter((val) => val.id !== id);
     setSelectedItem(null);
     setDisplayArray(filteredArray);
-    updateBackend(filteredArray);
+    // updateBackend(filteredArray);
   };
 
   const accept = () => {
@@ -152,10 +168,11 @@ export default function Adarta() {
               </div>
             ))}
           </div>
+          {selectedItem && <VerifyRegistration item={selectedItem}/>}
 
           {/* Right Section (Openable) */}
           {/* Rest of your code */}
-          {selectedItem && (
+          {/* {selectedItem && (
             <div className="flex flex-col gap-1 w-full">
               <div className="bg-[#092169] text-white px-2 py-3 mt-2">
                 company
@@ -215,7 +232,7 @@ export default function Adarta() {
                 )}
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </Alayout>
       {activate && (
@@ -236,8 +253,8 @@ export default function Adarta() {
           ></textarea>
           <button
             className="bg-red-400 py-4 w-fit px-4 rounded-md my-4 font-md text-white disabled:bg-slate-400"
-            onClick={rejectmessage}
-            disabled= {!rMessage}
+            onClick={() => rejectmessage(selectedItem.id)}
+            disabled={!rMessage}
           >
             Reject Message
           </button>

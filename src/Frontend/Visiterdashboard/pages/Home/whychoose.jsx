@@ -38,10 +38,9 @@ export default function WhyChoose() {
   ];
   return (
     <div className="pl-16 flex flex-col justify-center items-center py-12 px-24 gap-12 ">
-   
-        <span className="text-3xl font-bold flex justify-center text-center text-[#092169]  gap-3  ">
+      <span className="text-3xl font-bold flex justify-center text-center text-[#092169]  gap-3  ">
         Why Choose US{" "}
-        </span>
+      </span>
       <div className=" flex flex-wrap  justify-center  text-center ">
         {demo().map((demo) => (
           <span className="flex  flex-col gap-3 mb-8 w-[225px] px-3 justify-center  items-center py-5 mr-7 bg-white shadow-xl rounded-xl">
