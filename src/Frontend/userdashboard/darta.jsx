@@ -71,84 +71,124 @@ export default function Udarta() {
     const isConfirm = window.confirm("Are you sure to register");
 
     if (isConfirm) {
-      try {
-        // Upload document to Cloudinary
-        const formData = new FormData();
-        formData.append("file", compressedImg);
-        formData.append("upload_preset", "nirajan");
-        formData.append("cloud_name", "dy6obggnfn");
+      const isValidFields = await verifyValidFields({
+        name: name,
+        email: email,
+      });
+      console.log({ isValidFields });
+      if (isValidFields) {
+        try {
+          // Upload document to Cloudinary
+          const formData = new FormData();
+          formData.append("file", compressedImg);
+          formData.append("upload_preset", "nirajan");
+          formData.append("cloud_name", "dy6obggnfn");
 
-        const cloudinaryResponse = await fetch(
-          "https://api.cloudinary.com/v1_1/dy6obggnf/image/upload",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-
-        if (!cloudinaryResponse.ok) {
-          const cloudinaryErrorData = await cloudinaryResponse.json();
-          return;
-        }
-
-        const cloudinaryData = await cloudinaryResponse.json();
-
-        // Send data to backend
-        const backendResponse = await fetch(
-          "http://localhost:3000/api/register-darta",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              name,
-              type,
-              phone,
-              address,
-              email,
-              date,
-              document: cloudinaryData.secure_url,
-            }),
-          }
-        );
-
-        if (backendResponse.ok) {
-          const backendData = await backendResponse.json();
-          toast.error(backendData.message)
-
-          const dartaData = await fetch(
-            `http://localhost:3000/api/getDartaById/${backendData.data}`,
+          const cloudinaryResponse = await fetch(
+            "https://api.cloudinary.com/v1_1/dy6obggnf/image/upload",
             {
-              method: "GET",
+              method: "POST",
+              body: formData,
+            }
+          );
+
+          if (!cloudinaryResponse.ok) {
+            const cloudinaryErrorData = await cloudinaryResponse.json();
+            return;
+          }
+
+          const cloudinaryData = await cloudinaryResponse.json();
+
+          // Send data to backend
+          const backendResponse = await fetch(
+            "http://localhost:3000/api/register-darta",
+            {
+              method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
+              body: JSON.stringify({
+                name,
+                type,
+                phone,
+                address,
+                email,
+                date,
+                document: cloudinaryData.secure_url,
+              }),
             }
           );
-          const darta= await dartaData.json()
-          console.log("Backend Response:", darta);
-          localStorage.setItem("dartaDetails", JSON.stringify(darta.data));
-          localStorage.setItem("phone", phone);
-          // Clear form data if the backend operation is successful
-          setname("");
-          settype("");
-          setphone("");
-          setaddress("");
-          setemail("");
-          setdate("");
-          setdocument(null);
-          setprevious(false);
-          setdetail(false);
-        } else {
-          toast.error("Phone number must be unique");
+
+          if (backendResponse.ok) {
+            const backendData = await backendResponse.json();
+            toast.error(backendData.message);
+
+            const dartaData = await fetch(
+              `http://localhost:3000/api/getDartaById/${backendData.data}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const darta = await dartaData.json();
+            console.log("Backend Response:", darta);
+            localStorage.setItem("dartaDetails", JSON.stringify(darta.data));
+            localStorage.setItem("phone", phone);
+            // Clear form data if the backend operation is successful
+            setname("");
+            settype("");
+            setphone("");
+            setaddress("");
+            setemail("");
+            setdate("");
+            setdocument(null);
+            setprevious(false);
+            setdetail(false);
+          } else {
+            toast.error("Phone number must be unique");
+          }
+        } catch (error) {
+          console.log("bro where ?");
         }
-      } catch (error) {
-        console.log("bro where ?");
       }
     }
+  };
 
-    // -----------------------image compressor-------------------
+  const verifyValidFields = async (payload) => {
+    const isEmail = await fetch(
+      `http://localhost:3000/api/isDupEmail/${payload.email}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+    if (isEmail.ok) {
+      const isName = await fetch(
+        `http://localhost:3000/api/isDupName/${payload.name}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+      if (isName.ok) {
+        return true;
+      } else {
+        const nameError = await isName.json();
+        toast.error(nameError.message);
+      }
+    } else {
+      const emailError = await isEmail.json();
+      toast.error(emailError.message);
+      return false;
+    }
   };
 
   return (
@@ -185,7 +225,7 @@ export default function Udarta() {
                   </span>
                   <input
                     type="text"
-                    placeholder="Enter Your Name"
+                    placeholder="Enter Company Type"
                     value={type}
                     onChange={(e) => settype(e.target.value)}
                     className="w-[25vw] py-2 rounded-md pl-2 outline-none"
@@ -198,7 +238,7 @@ export default function Udarta() {
                   </span>
                   <input
                     type="text"
-                    placeholder="Enter Your Name"
+                    placeholder="Enter Address"
                     className="w-[25vw] py-2 rounded-md pl-2 outline-none"
                     value={address}
                     onChange={(e) => setaddress(e.target.value)}
