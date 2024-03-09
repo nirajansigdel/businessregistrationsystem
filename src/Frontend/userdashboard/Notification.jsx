@@ -1,36 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { Ulayout } from "./layout";
-import axios from "axios";
+import Card from "../../components/Card";
 
 export default function Notification() {
   const [apiData, setApiData] = useState([]);
-
-  const phone = localStorage.getItem("phone");
+  const dartaDetail = JSON.parse(localStorage.getItem("dartaDetails"));
+  const [email, setEmail] = useState(dartaDetail.Email);
 
   useEffect(() => {
-    console.log(phone);
     try {
-      if (phone) {
+      if (email) {
         const apiCall = async () => {
-          const res = await axios.post(
-            "http://localhost:3000/api/get-user-darta-message",
+          const res = await fetch(
+            `http://localhost:3000/api/getNotificationsById/${email}`,
             {
-              mobileNumber: phone,
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
             }
           );
-          setApiData(res.data.data);
+          const { data } = await res.json();
+          console.log({ data });
+
+          setApiData(data);
         };
         apiCall();
       }
     } catch (error) {}
-  }, [phone]);
+  }, [email]);
 
   return (
     <Ulayout>
-      <div className="flex flex-col w-[1000px]  pb-10 pt-4 items-center gap-5">
-        {apiData?.map((val) => (
-          <div key={val.id}>{val.accept_reject_message}</div>
-        ))}
+      <div className="p-8">
+        <Card className="p-8">
+          <div className="flex flex-col w-[1000px]  pb-10 pt-4 items-center gap-5">
+            {apiData?.map((val) => (
+              <div key={val.id}>{val.accept_reject_message}</div>
+            ))}
+          </div>
+        </Card>
       </div>
     </Ulayout>
   );

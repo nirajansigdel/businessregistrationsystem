@@ -13,7 +13,7 @@ const Payment = () => {
   const [openConfirmModal, setConfirmModal] = useState(false);
   const [openPaymentSuccessModal, setPaymentSuccessModal] = useState(false);
   const [paymentPayload, setPaymentPayload] = useState(null);
-  const[clientSecret, setClientSecret] = useState("")
+  const [clientSecret, setClientSecret] = useState("");
   const [packageData, setPackageData] = useState({
     name: "",
     value: "",
@@ -25,7 +25,7 @@ const Payment = () => {
   );
 
   const appearance = {
-    theme: 'stripe',
+    theme: "stripe",
   };
   const options = {
     clientSecret,
@@ -43,14 +43,18 @@ const Payment = () => {
       setPaymentPayload({
         ...paymentPayload,
         package: packageData.value,
-        amount: selectOptions.find(option => option.value === packageData.value),
+        amount: selectOptions.find(
+          (option) => option.value === packageData.value
+        ),
       });
       if (paymentType === "online") setPaymentModal(true);
       else {
-        const payload = selectOptions.find(option => option.value === packageData.value)
-        console.log({payload})
-        const {clientSecret} = await createIntentPayment(payload);
-        setClientSecret(clientSecret)
+        const payload = selectOptions.find(
+          (option) => option.value === packageData.value
+        );
+        console.log({ payload });
+        const { clientSecret } = await createIntentPayment(payload);
+        setClientSecret(clientSecret);
       }
     }
   };
@@ -143,11 +147,9 @@ const Payment = () => {
       )}
       {clientSecret && (
         <Elements options={options} stripe={stripePromise} key={clientSecret}>
-          <CheckoutForm clientSecret={clientSecret} packageData={packageData}/>
+          <CheckoutForm clientSecret={clientSecret} packageData={packageData} />
         </Elements>
       )}
-
-
     </>
   );
 };

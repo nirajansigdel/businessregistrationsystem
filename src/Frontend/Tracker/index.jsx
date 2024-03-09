@@ -9,21 +9,21 @@ import { MdOutlinePayments } from "react-icons/md";
 const ProgressTimeline = () => {
   const [progress, setProgress] = useState(null);
   const userDetail = JSON.parse(localStorage.getItem("dartaDetails"));
-  console.log({ userDetail });
+  const [email, setEmail] = useState(userDetail.Email);
 
   useEffect(() => {
-    if (userDetail) {
+    if (email) {
       const verifyProgress = async () => {
-        const dataProgress = await getDartaByEmail(userDetail.Email);
+        const dataProgress = await getDartaByEmail(email);
         setProgress(dataProgress.data[0]);
       };
       verifyProgress();
     }
-  }, [userDetail]);
+  }, [email]);
 
   return (
     <Ulayout>
-      {userDetail && userDetail.Email ? (
+      {userDetail && email ? (
         <>
           {" "}
           <Card title="Progress Tracker" className="mt-16">

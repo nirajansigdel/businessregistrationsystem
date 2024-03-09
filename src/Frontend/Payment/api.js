@@ -16,7 +16,7 @@ export const postPaymentData = async (paymentPayload) => {
   return response;
 };
 
-export const verifyWalletUser = async (userData ) => {
+export const verifyWalletUser = async (userData) => {
   const response = await fetch("http://localhost:3000/api/isWalletExist", {
     method: "PUT",
     headers: {
@@ -29,7 +29,7 @@ export const verifyWalletUser = async (userData ) => {
   // } else {
   //   toast.error("Failed While Processing");
   // }
-  return response
+  return response;
 };
 
 export const validateToken = async (token) => {
@@ -40,12 +40,11 @@ export const validateToken = async (token) => {
     },
     body: JSON.stringify(token),
   });
-  const responseMessage = await response.json()
-  console.log({response, responseMessage})
-  if (response.ok) {
-    toast.success(responseMessage);
-  } else {
-    toast.error(responseMessage);
-  }
-  return response
+  // const responseMessage = await response.json();
+  // if (response.ok) {
+  //   toast.success(responseMessage);
+  // } else {
+  //   toast.error(responseMessage);
+  // }
+  return response;
 };

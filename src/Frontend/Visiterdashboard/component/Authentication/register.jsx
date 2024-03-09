@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TokenModal from "./tokenModal";
 
 export default function Register() {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [confirmpassword, setconfirmpassword] = useState("");
+  const [isOpen, setModalOpen] = useState(false);
   const Register = async (data) => {
     try {
       // Validate input fields
@@ -28,16 +30,11 @@ export default function Register() {
       }
 
       // Make a POST request to the server's registration endpoint
-      await axios.post("http://localhost:3000/api/register", {
+      const response = await axios.post("http://localhost:3000/api/register", {
         email,
         password,
       });
-
-      // Display success message
-      toast.success("Registered successfully!", { position: "top-center" });
-
-      // Redirect to login page
-      window.location = "/login";
+      if (response.status === 200) setModalOpen(true);
     } catch (error) {
       // Display error message
       toast.error(error.message);
@@ -97,7 +94,12 @@ export default function Register() {
           </Link>
         </div>
       </div>
-      <ToastContainer />
+      <TokenModal
+        onClose={() => setModalOpen(false)}
+        isOpen={isOpen}
+        walletId={email}
+      />
+      ;
     </div>
   );
 }

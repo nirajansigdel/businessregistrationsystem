@@ -4,6 +4,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dartaimage from "./dartaimage.png";
 import ImgCompressor from "./compress";
+import Payment from "../Payment";
+import { Link } from "react-router-dom";
 
 export default function Udarta() {
   const [name, setname] = useState("");
@@ -17,6 +19,7 @@ export default function Udarta() {
   const [previous, setprevious] = useState(false);
   const [geterror, setGeterror] = useState("");
   const [compressedImg, setCompressedImg] = useState(null);
+  const [dartaSuccess, setDartaSuccess] = useState(false);
 
   // for title only
   const titlename = [
@@ -69,13 +72,11 @@ export default function Udarta() {
   };
   const submitconfirm = async () => {
     const isConfirm = window.confirm("Are you sure to register");
-
     if (isConfirm) {
       const isValidFields = await verifyValidFields({
         name: name,
         email: email,
       });
-      console.log({ isValidFields });
       if (isValidFields) {
         try {
           // Upload document to Cloudinary
@@ -122,7 +123,6 @@ export default function Udarta() {
           if (backendResponse.ok) {
             const backendData = await backendResponse.json();
             toast.error(backendData.message);
-
             const dartaData = await fetch(
               `http://localhost:3000/api/getDartaById/${backendData.data}`,
               {
@@ -132,20 +132,21 @@ export default function Udarta() {
                 },
               }
             );
+            console.log({ dartaData });
             const darta = await dartaData.json();
-            console.log("Backend Response:", darta);
             localStorage.setItem("dartaDetails", JSON.stringify(darta.data));
             localStorage.setItem("phone", phone);
+            setDartaSuccess(dartaData.ok);
             // Clear form data if the backend operation is successful
-            setname("");
-            settype("");
-            setphone("");
-            setaddress("");
-            setemail("");
-            setdate("");
-            setdocument(null);
-            setprevious(false);
-            setdetail(false);
+            // setname("");
+            // settype("");
+            // setphone("");
+            // setaddress("");
+            // setemail("");
+            // setdate("");
+            // setdocument(null);
+            // setprevious(false);
+            // setdetail(false);
           } else {
             toast.error("Phone number must be unique");
           }
@@ -398,7 +399,18 @@ export default function Udarta() {
           </div>
         </div>
       )}
-      <ToastContainer />
+      {dartaSuccess && (
+        <div className="flex mx-10 p-3 my-2 flex-col gap-7 justify-center items-center bg-white">
+          <div>
+            <p>
+              You have Successfully sent your company details. Please make a
+              payment for successfully register
+            </p>
+          </div>
+          <Payment />
+          {/* <small>Go to home page <Link to={<Profile />} /></small> */}
+        </div>
+      )}
     </Ulayout>
   );
 }

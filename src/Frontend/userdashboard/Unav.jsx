@@ -1,4 +1,5 @@
 import React from "react";
+import { ImProfile } from "react-icons/im";
 
 import { Link } from "react-router-dom";
 import { IoNotifications } from "react-icons/io5";
@@ -14,21 +15,24 @@ export default function Umain() {
     <div className="flex justify-between bg-[#092169] font-medium  px-5 shadow-xl  py-6 items-center sticky top-0 z-10">
       {/* Added 'sticky' and 'top-0' classes */}
       <div>
-      <Link to="/user">
-      <span className="font-bold text-white ">Client</span>
+        <Link to="/user">
+          <span className="font-bold text-white ">Client</span>
         </Link>
-      <Link to="/user/wallet">
-      <span className="font-bold text-white ml-4">Payment</span>
+        <Link to="/user/wallet">
+          <span className="font-bold text-white ml-4">Payment</span>
         </Link>
         <Link to="/user/form-tracker">
-      <span className="font-bold text-white ml-4">Progress Tracker</span>
+          <span className="font-bold text-white ml-4">Progress Tracker</span>
         </Link>
       </div>
-     
+
       <ul className="flex gap-2"></ul>
       <div className="flex items-center gap-5">
         <Link to="/unotification">
           <IoNotifications className="w-[30px] h-[30px] text-white " />
+        </Link>
+        <Link to="/profile">
+          <ImProfile color="#fff" size={28} />
         </Link>
         <span
           className="font-semibold border-2 rounded-md px-2 py-1  text-white "
