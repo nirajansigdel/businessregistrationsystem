@@ -4,6 +4,7 @@ import { getPaymentById, updateVerification } from "./api";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { IoCheckmarkDone, IoDocumentOutline } from "react-icons/io5";
 import { MdOutlinePayments } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const VerifyRegistration = ({ item }) => {
   const [activeTab, setActiveTab] = useState("companyDetails");
@@ -42,7 +43,6 @@ const VerifyRegistration = ({ item }) => {
       isPaymentVerified: tab === "payment" && false,
     }));
   };
-
   const onSubmitVerify = async () => {
     const payload = {
       ...verifyPayload,
@@ -50,10 +50,15 @@ const VerifyRegistration = ({ item }) => {
     };
     const isSuccessVerify = await updateVerification(payload);
     console.log([isSuccessVerify]);
+    toast.success("Updated")
+    setActiveTab("companyDetails")
+  
+
   };
   const activeTabData = () => {
     if (activeTab === "companyDetails") {
       return (
+        
         <div className="w-full">
           <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
             Profile Tab
@@ -80,7 +85,9 @@ const VerifyRegistration = ({ item }) => {
                 onDiscardVerify();
                 setOpenModal(true);
               }}
-              className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+              className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none
+               focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex
+                items-center px-5 py-2.5 text-center"
             >
               Discard
             </button>
@@ -90,7 +97,10 @@ const VerifyRegistration = ({ item }) => {
               onClick={() => {
                 onClickVerify(activeTab);
               }}
-              className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+              className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 
+              focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100
+               hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700
+                dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
             >
               {verifyPayload.isFormVerified ? "Verified" : "Verify"}
             </button>
@@ -197,11 +207,10 @@ const VerifyRegistration = ({ item }) => {
         <li>
           <button
             type="button"
-            className={`inline-flex items-center px-4 py-3 ${
-              activeTab === "companyDetails"
+            className={`inline-flex items-center px-4 py-3 ${activeTab === "companyDetails"
                 ? " text-white bg-blue-700"
                 : "bg-gray-50"
-            } rounded-lg active w-full`}
+              } rounded-lg active w-full`}
             onClick={() => setActiveTab("companyDetails")}
           >
             <HiOutlineBuildingOffice2 />
@@ -211,11 +220,10 @@ const VerifyRegistration = ({ item }) => {
         <li>
           <button
             onClick={() => setActiveTab("document")}
-            className={`inline-flex items-center px-4 py-3 ${
-              activeTab === "document"
+            className={`inline-flex items-center px-4 py-3 ${activeTab === "document"
                 ? " text-white bg-blue-700"
                 : "bg-gray-50"
-            } rounded-lg active w-full`}
+              } rounded-lg active w-full`}
           >
             <IoDocumentOutline />
             Document Verifcation
@@ -224,9 +232,8 @@ const VerifyRegistration = ({ item }) => {
         <li>
           <button
             type="button"
-            className={`inline-flex items-center px-4 py-3 ${
-              activeTab === "payment" ? " text-white bg-blue-700" : "bg-gray-50"
-            } rounded-lg active w-full`}
+            className={`inline-flex items-center px-4 py-3 ${activeTab === "payment" ? " text-white bg-blue-700" : "bg-gray-50"
+              } rounded-lg active w-full`}
             onClick={() => setActiveTab("payment")}
           >
             <MdOutlinePayments />
@@ -236,9 +243,8 @@ const VerifyRegistration = ({ item }) => {
         <li>
           <button
             type="button"
-            className={`inline-flex items-center px-4 py-3 ${
-              activeTab === "confirm" ? " text-white bg-blue-700" : "bg-gray-50"
-            } rounded-lg active w-full`}
+            className={`inline-flex items-center px-4 py-3 ${activeTab === "confirm" ? " text-white bg-blue-700" : "bg-gray-50"
+              } rounded-lg active w-full`}
             onClick={() => setActiveTab("confirm")}
           >
             <IoCheckmarkDone />

@@ -16,7 +16,7 @@ const CheckoutForm = ({ clientSecret, packageData}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [walletId, setWalletId] = useState("");
   const [error, setError] = useState("WalletId cannot be empty");
-
+  const dartaDetail = JSON.parse(localStorage.getItem("dartaDetails"));
   useEffect(() => {
     if (!stripe) {
       return;
@@ -79,7 +79,10 @@ const CheckoutForm = ({ clientSecret, packageData}) => {
         const payload= {
             walletId:walletId,
             package:packageData.value,
-            amount:isPayment.paymentIntent.amount
+            amount:isPayment.paymentIntent.amount,
+            dartaId: dartaDetail.id,
+          
+
         }
         const addPayment= await postPaymentData(payload)
 
@@ -89,11 +92,7 @@ const CheckoutForm = ({ clientSecret, packageData}) => {
 
     }
     console.log(isPayment)
-    // if (error.type === "card_error" || error.type === "validation_error") {
-    //   setMessage(error.message);
-    // } else {
-    //   setMessage("An unexpected error occurred.");
-    // }
+
 
     setIsLoading(false);
   };

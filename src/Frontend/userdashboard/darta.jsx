@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Ulayout } from "./layout";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dartaimage from "./dartaimage.png";
 import ImgCompressor from "./compress";
-import Payment from "../Payment";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Udarta() {
   const [name, setname] = useState("");
@@ -20,6 +19,7 @@ export default function Udarta() {
   const [geterror, setGeterror] = useState("");
   const [compressedImg, setCompressedImg] = useState(null);
   const [dartaSuccess, setDartaSuccess] = useState(false);
+  const navigator = useNavigate();
 
   // for title only
   const titlename = [
@@ -56,8 +56,10 @@ export default function Udarta() {
       return;
     }
     // Validate email format (contains '@' symbol)
-    if (!email.includes("@")) {
-      toast.error("Email must contain '@' symbol");
+
+    const emailregex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    if (!emailregex.test(email)) {
+      toast.error("Email must have email format");
       return;
     }
 
@@ -122,7 +124,7 @@ export default function Udarta() {
 
           if (backendResponse.ok) {
             const backendData = await backendResponse.json();
-            toast.error(backendData.message);
+            toast.success(backendData.message);
             const dartaData = await fetch(
               `http://localhost:3000/api/getDartaById/${backendData.data}`,
               {
@@ -137,16 +139,7 @@ export default function Udarta() {
             localStorage.setItem("dartaDetails", JSON.stringify(darta.data));
             localStorage.setItem("phone", phone);
             setDartaSuccess(dartaData.ok);
-            // Clear form data if the backend operation is successful
-            // setname("");
-            // settype("");
-            // setphone("");
-            // setaddress("");
-            // setemail("");
-            // setdate("");
-            // setdocument(null);
-            // setprevious(false);
-            // setdetail(false);
+            navigator("/user/wallet");
           } else {
             toast.error("Phone number must be unique");
           }
@@ -209,7 +202,7 @@ export default function Udarta() {
                 <span className="flex">
                   <span className="flex font-medium  w-[210px]">
                     {" "}
-                    Company Name(English)*{" "}
+                    Company Name(English)*  :{" "}
                   </span>
                   <input
                     type="text"
@@ -220,17 +213,20 @@ export default function Udarta() {
                   />
                 </span>
                 <span className="flex">
-                  <span className="flex font-medium    w-[210px]">
+                  <span className="flex font-medium w-[210px]">
                     {" "}
                     Company Type* :{" "}
                   </span>
-                  <input
-                    type="text"
-                    placeholder="Enter Company Type"
+                  <select
                     value={type}
                     onChange={(e) => settype(e.target.value)}
-                    className="w-[25vw] py-2 rounded-md pl-2 outline-none"
-                  />
+                    className="py-2 rounded-md pl-2 outline-none"
+                    style={{ width: "25vw" }}
+                  >
+                    <option value="Online Business">Online Business</option>
+                    <option value="Hotel">Hotel</option>
+                    <option value="School">School</option>
+                  </select>
                 </span>
 
                 <span className="flex">
@@ -305,16 +301,6 @@ export default function Udarta() {
                     onClick={deletedocument}
                   /> */}
                 </span>
-              </div>
-            </div>
-            <div className="flex flex-col bg-white gap-5">
-              <div className="bg-[#092169] text-white px-2 py-3">
-                Document Details
-              </div>
-              <div className="flex flex-col bg-white py-5 px-2 w-[900px] gap-5">
-                <div className="flex justify-between">
-                  <span>{document ? document.name : "No file selected"}</span>
-                </div>
               </div>
             </div>
 
@@ -397,18 +383,6 @@ export default function Udarta() {
               </button>
             </div>
           </div>
-        </div>
-      )}
-      {dartaSuccess && (
-        <div className="flex mx-10 p-3 my-2 flex-col gap-7 justify-center items-center bg-white">
-          <div>
-            <p>
-              You have Successfully sent your company details. Please make a
-              payment for successfully register
-            </p>
-          </div>
-          <Payment />
-          {/* <small>Go to home page <Link to={<Profile />} /></small> */}
         </div>
       )}
     </Ulayout>

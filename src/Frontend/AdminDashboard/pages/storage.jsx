@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Alayout } from "../layout";
-import { useSelector } from "react-redux";
 import { FaEye, FaTimesCircle } from "react-icons/fa";
 import axios from "axios";
 
@@ -10,15 +9,21 @@ export default function YourComponent() {
   const [searchData, setSearchData] = useState("");
   const tabletitle = [
     { name: "Company Name" },
-    { type: "Company Type" },
-    { address: "Company Address" },
-    { phone: "Company Phone" },
-    { email: "Company Email " },
-    { date: " Issue Date" },
-    { Verify: "Verified By" },
-    { doc: " Document" },
+    { name: "Company Type" },
+    { name: "Company Address" },
+    { name: "Company Phone" },
+    { name: "Company Email " },
+    { name: " Issue Date" },
+    { name: " Document" },
   ];
-
+  const tabletitlewithoutdocumnet = [
+    { name: "Company Name :" },
+    { name: "Company Type :" },
+    { name: "Company Address :" },
+    { name: "Company Phone :" },
+    { name: "Company Email : " },
+    { name: " Issue Date :" },
+  ];
   // const data = useSelector((state) => state.propsSlice.userData);
   const [apiFetchedData, setApiFetchedData] = useState([]);
 
@@ -45,8 +50,6 @@ export default function YourComponent() {
     setActivate(true);
 
     const modalKoData = apiFetchedData.find((val) => {
-      // const datId = (val.id).toString()
-      // const sendId = id.toString()
       return val.id === id;
     });
 
@@ -56,7 +59,7 @@ export default function YourComponent() {
   return (
     <>
       <Alayout>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full">
           <div className=" py-4 gap-2 flex justify-center items-center">
             <input
               type="text"
@@ -77,34 +80,35 @@ export default function YourComponent() {
                   {" "}
                   {/* Add a unique key for each item */}
                   <th>{item.name}</th>
-                  <th>{item.type}</th>
-                  <th>{item.address}</th>
-                  <th>{item.phone}</th>
-                  <th>{item.email}</th>
-                  <th>{item.date}</th>
-                  <th>{item.Verify}</th>
-                  <th>{item.doc}</th>
                 </tr>
               ))}
             </thead>
 
-
-
             <tbody className="divide-y">
               {displayData.map((item) => (
                 <tr key={item.id} className="divide-x">
-                  <td className="py-3 px-2 w-[180px] overflow-hidden">{item.name}</td>
-                  <td className="py-3 px-2 w-[180px] overflow-hidden">{item.type}</td>
-                  <td className="py-3 px-2 w-[180px] overflow-hidden">{item.address}</td>
-                  <td className="py-3 px-2 w-[180px] overflow-hidden">{item.Phone}</td>
-                  <td className="py-3 px-2 w-[180px] overflow-hidden ">{item.Email}</td>
-                  <td className="py-3 px-2 w-[178px] overflow-hidden">{item.date}</td>
-                  {/* <td  className="py-3 px-[66px]">{item.is_verified === 1 ? 'Yes' : 'No'}</td>
-          <td  className="py-3 px-[66px] ">{item.rejection_message}</td> */}
-                  <td className="py-3 px-2  w-[180px]">{item.created_by}</td>
+                  <td className="py-3 px-2 w-[206px] overflow-hidden">
+                    {item.name}
+                  </td>
+                  <td className="py-3 px-2 w-[205px] overflow-hidden">
+                    {item.type}
+                  </td>
+                  <td className="py-3 px-2 w-[205px] overflow-hidden">
+                    {item.address}
+                  </td>
+                  <td className="py-3 px-2 w-[205px] overflow-hidden">
+                    {item.Phone}
+                  </td>
+                  <td className="py-3 px-2 w-[205px] overflow-hidden ">
+                    {item.Email}
+                  </td>
+                  <td className="py-3 px-2 w-[205px] overflow-hidden">
+                    {item.date}
+                  </td>
+
                   <td>
                     {/* <img src={item.document} alt="Document" style={{ width: '100px', height: 'auto' }} /> */}
-                    <td className="py-3 flex justify-center w-[178px]">
+                    <td className="py-3 flex justify-center w-[203px]">
                       <FaEye
                         onClick={() => eyeview(item.id)}
                         className="cursor-pointer"
@@ -125,46 +129,28 @@ export default function YourComponent() {
               />
             </div>
 
-            <div className="flex items-start justify-center gap-4">
-              <div className="flex px-4 items-start justify-center gap-10  py-4  flex-col ">
-                <div className="flex flex-col gap-6 ">
-                  <div className="flex gap-3">
-                    <span className="w-[140px]">Company Name:</span>
-                    <span className="text-red-400">{modalData.name}</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="w-[140px]">Company Type:</span>
-                    <span className="text-red-400">{modalData.type}</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="w-[140px]">Company Address:</span>
-                    <span className="text-red-400">{modalData.address}</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="w-[140px]">Company Phone:</span>
-                    <span className="text-red-400">{modalData.Phone}</span>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <span className="w-[140px]" clas>
-                      Company Email:
-                    </span>
-                    <span className="text-red-400">{modalData.Email}</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="w-[140px]">Issue data:</span>
-                    <span className="text-red-400">{modalData.date}</span>
-                  </div>
+            <div className="flex items-start justify-center gap-4 min-h-[100vh] px-5 py-4">
+              <div className="flex border-2 border-red-500 min-w-[500px]">
+              <div className="flex flex-col  text-xl font-semibold gap-8 p-4 w-[220px] ">
+                {tabletitlewithoutdocumnet.map((tabletitlewithoutdocumnet) => (
+                  <div className="flex">{tabletitlewithoutdocumnet.name}</div>
+                ))}
                 </div>
-
-                <div className="flex w-96">
-                  <img
-                    src={modalData.document}
-                    alt=""
-                    className="w-full h-full aspect-square object-contain"
-                  />
+                <div className="flex flex-col  text-xl gap-8 pt-4">
+                  <span className="text-green-400 text-xl">{modalData.name}</span>
+                  <span className="text-green-400 text-xl">   {modalData.type}</span>
+                  <span className="text-green-400 text-xl">{modalData.address}</span>
+                  <span className="text-green-400 text-xl">{modalData.Phone}</span>
+                  <span className="text-green-400 text-xl">{modalData.Email}</span>
+                  <span className="text-green-400 text-xl">{modalData.date}</span>
                 </div>
+                
               </div>
+              <img
+                src={modalData.document}
+                alt=""
+                className="w-full h-[400px] aspect-square object-contain"
+              />
             </div>
           </div>
         )}

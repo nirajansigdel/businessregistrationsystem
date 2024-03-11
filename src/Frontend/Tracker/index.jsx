@@ -44,7 +44,7 @@ const ProgressTimeline = () => {
                       </h3>
                       <p className="text-sm font-bold">
                         {progress.isFormVerified ? (
-                          <p className="text-green-400">Verified</p>
+                          <p className="text-white">Verified</p>
                         ) : (
                           <p>Not Verified</p>
                         )}
@@ -60,12 +60,12 @@ const ProgressTimeline = () => {
                       <IoDocumentTextOutline />
                     </span>
                     <div className="ml-32">
-                      <h3 className="font-medium leading-tight">
+                      <h3 className="font-medium leading-tight text-xl ">
                         Document Details
                       </h3>
                       <p className="text-sm font-bold">
                         {progress.isDocVerified ? (
-                          <p className="text-green-400">Verified</p>
+                          <p className="text-white text-xl">Verified</p>
                         ) : (
                           <p>Not Verified</p>
                         )}
@@ -83,12 +83,12 @@ const ProgressTimeline = () => {
                       <MdOutlinePayments />
                     </span>
                     <div className="ml-32">
-                      <h3 className="font-medium leading-tight">
+                      <h3 className="font-medium leading-tight text-xl">
                         Payment Verification
                       </h3>
                       <p className="text-sm font-bold">
                         {progress.isPaymentVerified ? (
-                          <p className="text-green-400">Verified</p>
+                          <p className="text-white">Verified</p>
                         ) : (
                           <p>Not Verified</p>
                         )}

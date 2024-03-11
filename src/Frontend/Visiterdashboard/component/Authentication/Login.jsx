@@ -14,6 +14,7 @@ export default function Login() {
     setShowPassword(!showPassword);
   };
 
+  
   const login = async () => {
     if (!email || !password) {
       alert("Field cannot be empty");
@@ -31,6 +32,7 @@ export default function Login() {
         window.location = "/admin";
         return;
       } else {
+        localStorage.setItem("dartaDetails","{}");
         window.location = "/user";
       }
     } catch (error) {
