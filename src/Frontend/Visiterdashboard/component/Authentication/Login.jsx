@@ -25,8 +25,11 @@ export default function Login() {
       });
       const userRole = response.data.userDetail.role;
       setRole(userRole);
-      localStorage.setItem("userProfile", JSON.stringify(response.data.userDetail))
-      toast.success(" sucessfully!");
+      localStorage.setItem(
+        "userProfile",
+        JSON.stringify(response.data.userDetail)
+      );
+      toast.success("Logged in sucessfully!");
       if (userRole === "Admin") {
         window.location = "/admin";
         return;
@@ -34,7 +37,7 @@ export default function Login() {
         window.location = "/user";
       }
     } catch (error) {
-      toast.error("Email or Password donot match");
+      toast.error(error.response.data.message);
     }
   };
   return (
@@ -76,7 +79,7 @@ export default function Login() {
           </p>
 
           <input
-            onClick={login}
+            onClick={() => login()}
             type="button"
             value="Login"
             className="w-[25vw] rounded-md pl-2 outline-none  bg-[#2C3A64] py-2 text-white hover:text-slate-200"

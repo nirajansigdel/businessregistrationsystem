@@ -23,7 +23,7 @@ const TokenModal = ({ isOpen = false, onClose, walletId }) => {
         // Redirect to login page
         window.location = "/login";
       } else {
-        toast.error("Invalide Token");
+        toast.error("Invalid Token");
       }
     }
   };

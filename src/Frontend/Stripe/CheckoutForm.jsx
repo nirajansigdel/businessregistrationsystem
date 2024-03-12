@@ -7,7 +7,7 @@ import {
 import Modal from "../../components/Modal";
 import { postPaymentData } from "../Payment/api";
 
-const CheckoutForm = ({ clientSecret, packageData}) => {
+const CheckoutForm = ({ clientSecret, packageData }) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -16,6 +16,7 @@ const CheckoutForm = ({ clientSecret, packageData}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [walletId, setWalletId] = useState("");
   const [error, setError] = useState("WalletId cannot be empty");
+  const dartaDetail = JSON.parse(localStorage.getItem("dartaDetails"));
 
   useEffect(() => {
     if (!stripe) {
@@ -73,22 +74,21 @@ const CheckoutForm = ({ clientSecret, packageData}) => {
     // your `return_url`. For some payment methods like iDEAL, your customer will
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
-    if(isPayment?.paymentIntent?.status === "succeeded")
-
-    {
-        const payload= {
-            walletId:walletId,
-            package:packageData.value,
-            amount:isPayment.paymentIntent.amount
-        }
-        const addPayment= await postPaymentData(payload)
-
+    if (isPayment?.paymentIntent?.status === "succeeded") {
+      const payload = {
+        walletId: walletId,
+        package: packageData.value,
+        amount: isPayment.paymentIntent.amount,
+        dartaId: dartaDetail.dartaId,
+      };
+      const addPayment = await postPaymentData(payload);
     }
-    if(isPayment?.error?.type  === "card_error" || isPayment?.error?.type === "validation_error")
-    {
-
+    if (
+      isPayment?.error?.type === "card_error" ||
+      isPayment?.error?.type === "validation_error"
+    ) {
     }
-    console.log(isPayment)
+    console.log(isPayment);
     // if (error.type === "card_error" || error.type === "validation_error") {
     //   setMessage(error.message);
     // } else {
@@ -107,7 +107,11 @@ const CheckoutForm = ({ clientSecret, packageData}) => {
     setWalletId(e.target.value);
   };
   return (
-    <Modal isOpen={isOpen} title="Stripe Payment" closeModal={()=> setIsOpen(false)}>
+    <Modal
+      isOpen={isOpen}
+      title="Stripe Payment"
+      closeModal={() => setIsOpen(false)}
+    >
       <div className="p-4">
         <form id="payment-form" onSubmit={handleSubmit}>
           <PaymentElement

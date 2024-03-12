@@ -132,7 +132,6 @@ export default function Udarta() {
                 },
               }
             );
-            console.log({ dartaData });
             const darta = await dartaData.json();
             localStorage.setItem("dartaDetails", JSON.stringify(darta.data));
             localStorage.setItem("phone", phone);
