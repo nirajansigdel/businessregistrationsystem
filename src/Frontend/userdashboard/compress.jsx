@@ -1,4 +1,8 @@
-const ImgCompressor = ({ setCompressedFile }) => {
+import { useState } from "react";
+
+const ImgCompressor = ({ setCompressedFile, editFile }) => {
+  const [showInput, setShowInput] = useState(false);
+
   const readImgFile = async (e) => {
     const { files } = e.target;
 
@@ -49,14 +53,35 @@ const ImgCompressor = ({ setCompressedFile }) => {
       <label for="fileUpload" className="w-[100px] font-medium px-1">
         Pan Photo:
       </label>
-      <input
-        type="file"
-        multiple
-        className="my-image-field"
-        id="fileUpload"
-        label="please input file"
-        onChange={(e) => readImgFile(e)}
-      />
+      {editFile ? (
+        !showInput && (
+          <button
+            onClick={() => setShowInput(true)}
+            className="border-2 p-2 bordor-black"
+          >
+            change image
+          </button>
+        )
+      ) : (
+        <input
+          type="file"
+          multiple
+          className="my-image-field"
+          id="fileUpload"
+          label="please input file"
+          onChange={(e) => readImgFile(e)}
+        />
+      )}
+      {showInput && (
+        <input
+          type="file"
+          multiple
+          className="my-image-field"
+          id="fileUpload"
+          label="please input file"
+          onChange={(e) => readImgFile(e)}
+        />
+      )}
     </>
   );
 };

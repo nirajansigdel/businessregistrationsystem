@@ -45,7 +45,7 @@ export default function Anav() {
           <Link
             to="/admin/report"
             className={`${
-              pathname === "/astorage"
+              pathname === "/admin/report"
                 ? "text-yellow-500 font-bold"
                 : "text-white"
             }`}

@@ -81,39 +81,6 @@ export default function Adarta() {
     setShowRejectSection(true);
   };
 
-  // const updateBackend = async (data) => {
-  //   try {
-  //     const backendResponse = await fetch(
-  //       "http://localhost:3000/api/verify-darta",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(data),
-  //       }
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const requests = [
-  //   axios.post("http://localhost:3000/api/verify-darta", {
-  //     mobileNumber: selectedItem.Phone,
-  //     status: "0",
-  //     rejectionMessage: rMessage,
-  //   }),
-
-  //   axios.post("http://localhost:3000/api/verify-darta", {
-  //     mobileNumber: selectedItem.Phone,
-  //     status: "1",
-  //   })
-  // ];
-
-  // const endRes = await Promise.all(requests);
-  // console.log(endRes)
-
   const handleAccept = async (id) => {
     console.log(selectedItem.Phone);
     try {
@@ -122,12 +89,7 @@ export default function Adarta() {
         status: "1",
         rejectionMessage: "",
       });
-      // const res = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
-
-      // console.log(res, "pulled one");
-      // const resArr = res.data;
-      // const latesetData = resArr.pop();
-      // console.log(latesetData, "latest");
+  
       setActivate(false);
     } catch (error) {
       console.log(error);
@@ -169,70 +131,6 @@ export default function Adarta() {
             ))}
           </div>
           {selectedItem && <VerifyRegistration item={selectedItem}/>}
-
-          {/* Right Section (Openable) */}
-          {/* Rest of your code */}
-          {/* {selectedItem && (
-            <div className="flex flex-col gap-1 w-full">
-              <div className="bg-[#092169] text-white px-2 py-3 mt-2">
-                company
-              </div>
-              <div className="flex border-2  px-7 py-4">
-                <div className="">
-                  {titlename.map((details) => (
-                    <div
-                      key={details.id}
-                      className="w-[150px] flex flex-col gap-[7.2px] font-semibold "
-                    >
-                      <p>{details.dname}</p>
-                      <p>{details.dtype}</p>
-                      <p>{details.daddress}</p>
-                      <p>{details.dphone}</p>
-                      <p>{details.demail}</p>
-                      <p>{details.ddate}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex flex-col flex-grow gap-10 font-semibold">
-                  <p className="border-2 px-2 ">{selectedItem?.name}</p>
-                  <p className="border-2  px-2 "> {selectedItem?.type}</p>
-                  <p className="border-2  px-2 ">{selectedItem?.address}</p>
-                  <p className="border-2 px-2 "> {selectedItem?.Phone}</p>
-                  <p className="border-2  px-2 ">{selectedItem?.Email}</p>
-                  <p className="border-2  px-2 ">{selectedItem?.date}</p>
-                </div>
-              </div>
-              <div>
-                <div className="bg-[#092169] text-white px-2 py-3 mt-2">
-                  Document
-                </div>
-                <img
-                  src={selectedItem?.document}
-                  alt="Description of the image"
-                  className=" aspect-square object-contain w-full"
-                />
-              </div>
-              <div className="py-5 justify-center flex">
-                {selectedItem && (
-                  <>
-                    <button
-                      className="bg-green-500  px-20 py-2 font-semibold border-2 rounded-md text-white"
-                      onClick={() => handleAccept(selectedItem.id)}
-                    >
-                      Accept
-                    </button>
-
-                    <button
-                      className="bg-red-500  px-20 py-2 font-semibold border-2 rounded-md text-white "
-                      onClick={() => setActivate(true)}
-                    >
-                      Reject
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          )} */}
         </div>
       </Alayout>
       {activate && (

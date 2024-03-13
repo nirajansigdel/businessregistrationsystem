@@ -4,6 +4,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import TokenReverify from "./reverifyToken";
 
 export default function Login() {
   const [email, setemail] = useState("");
@@ -13,6 +14,7 @@ export default function Login() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  const [modalOpen, setIsModalOpen] = useState(false);
 
   const login = async () => {
     if (!email || !password) {
@@ -34,6 +36,7 @@ export default function Login() {
         window.location = "/admin";
         return;
       } else {
+        localStorage.setItem("dartaDetails", "{}");
         window.location = "/user";
       }
     } catch (error) {
@@ -85,10 +88,12 @@ export default function Login() {
             className="w-[25vw] rounded-md pl-2 outline-none  bg-[#2C3A64] py-2 text-white hover:text-slate-200"
           />
           <p className="font-serif">Forgot password ?</p>
+          <p className="font-serif" onClick={() => setIsModalOpen(!modalOpen)}>
+            Reverify Registered Email
+          </p>
         </div>
       </div>
-
-      <ToastContainer />
+      <TokenReverify isOpen={modalOpen} onClose={setIsModalOpen} />
     </div>
   );
 }

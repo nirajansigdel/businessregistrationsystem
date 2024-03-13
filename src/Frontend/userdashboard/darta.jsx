@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Ulayout } from "./layout";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dartaimage from "./dartaimage.png";
 import ImgCompressor from "./compress";
-import Payment from "../Payment";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { getDartaByEmail } from "../Profile/api";
 
 export default function Udarta() {
   const [name, setname] = useState("");
@@ -20,6 +20,36 @@ export default function Udarta() {
   const [geterror, setGeterror] = useState("");
   const [compressedImg, setCompressedImg] = useState(null);
   const [dartaSuccess, setDartaSuccess] = useState(false);
+  const navigator = useNavigate();
+  const dartaDetail = JSON.parse(localStorage.getItem("userProfile"));
+  const [dartaEmail, setEmail] = useState(dartaDetail.email);
+  const [dartaProfile, setDartaProfile] = useState(null);
+  const [editable, setIsEditable] = useState(false);
+
+  useEffect(() => {
+    if (dartaEmail) {
+      const getProfile = async () => {
+        const profileData = await getDartaByEmail(dartaEmail);
+        setDartaProfile(profileData.data);
+        if (profileData?.data?.length) setIsEditable(true);
+      };
+      getProfile();
+    }
+  }, [dartaEmail]);
+
+  useEffect(() => {
+    if (dartaProfile && dartaProfile.length > 0) {
+      const { name, type, address, Phone, date, document, Email } =
+        dartaProfile[0];
+      setname(name);
+      setemail(Email);
+      setaddress(address);
+      setdate(date);
+      setphone(Phone);
+      settype(type);
+      setdocument(document);
+    }
+  }, [dartaProfile]);
 
   // for title only
   const titlename = [
@@ -37,15 +67,7 @@ export default function Udarta() {
   };
 
   const registerbusiness = () => {
-    if (
-      !name ||
-      !type ||
-      !address ||
-      !phone ||
-      !email ||
-      !date ||
-      !compressedImg
-    ) {
+    if (!name || !type || !address || !phone || !email || !date) {
       toast.error("Fields cannot be empty");
       return;
     }
@@ -56,8 +78,10 @@ export default function Udarta() {
       return;
     }
     // Validate email format (contains '@' symbol)
-    if (!email.includes("@")) {
-      toast.error("Email must contain '@' symbol");
+
+    const emailregex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    if (!emailregex.test(email)) {
+      toast.error("Email must have email format");
       return;
     }
 
@@ -73,38 +97,49 @@ export default function Udarta() {
   const submitconfirm = async () => {
     const isConfirm = window.confirm("Are you sure to register");
     if (isConfirm) {
-      const isValidFields = await verifyValidFields({
-        name: name,
-        email: email,
-      });
-      if (isValidFields) {
+      let isValidFields;
+      let cloudinaryResponse;
+      let cloudinaryData;
+
+      if (!editable) {
+        isValidFields = await verifyValidFields({
+          name: name,
+          email: email,
+        });
+      }
+      if (isValidFields || editable) {
         try {
           // Upload document to Cloudinary
+
+          console.log({ compressedImg });
           const formData = new FormData();
           formData.append("file", compressedImg);
           formData.append("upload_preset", "nirajan");
           formData.append("cloud_name", "dy6obggnfn");
 
-          const cloudinaryResponse = await fetch(
-            "https://api.cloudinary.com/v1_1/dy6obggnf/image/upload",
-            {
-              method: "POST",
-              body: formData,
-            }
-          );
+          if (compressedImg)
+            cloudinaryResponse = await fetch(
+              "https://api.cloudinary.com/v1_1/dy6obggnf/image/upload",
+              {
+                method: "POST",
+                body: formData,
+              }
+            );
 
-          if (!cloudinaryResponse.ok) {
-            const cloudinaryErrorData = await cloudinaryResponse.json();
-            return;
+          // if (!cloudinaryResponse.ok) {
+          //   const cloudinaryErrorData = await cloudinaryResponse.json();
+          // }
+          if (cloudinaryResponse) {
+            cloudinaryData = await cloudinaryResponse.json();
+            if (!cloudinaryResponse.ok) return;
           }
 
-          const cloudinaryData = await cloudinaryResponse.json();
-
           // Send data to backend
-          const backendResponse = await fetch(
+          let backendResponse;
+          backendResponse = await fetch(
             "http://localhost:3000/api/register-darta",
             {
-              method: "POST",
+              method: `${editable ? "PUT" : "POST"}`,
               headers: {
                 "Content-Type": "application/json",
               },
@@ -115,16 +150,16 @@ export default function Udarta() {
                 address,
                 email,
                 date,
-                document: cloudinaryData.secure_url,
+                document: compressedImg ? cloudinaryData.secure_url : document,
               }),
             }
           );
 
           if (backendResponse.ok) {
             const backendData = await backendResponse.json();
-            toast.error(backendData.message);
+            toast.success(backendData.message);
             const dartaData = await fetch(
-              `http://localhost:3000/api/getDartaById/${backendData.data}`,
+              `http://localhost:3000/api/getDartaByEmail/${email}`,
               {
                 method: "GET",
                 headers: {
@@ -133,24 +168,16 @@ export default function Udarta() {
               }
             );
             const darta = await dartaData.json();
+            console.log({ darta });
             localStorage.setItem("dartaDetails", JSON.stringify(darta.data));
             localStorage.setItem("phone", phone);
             setDartaSuccess(dartaData.ok);
-            // Clear form data if the backend operation is successful
-            // setname("");
-            // settype("");
-            // setphone("");
-            // setaddress("");
-            // setemail("");
-            // setdate("");
-            // setdocument(null);
-            // setprevious(false);
-            // setdetail(false);
+            navigator("/user/wallet");
           } else {
             toast.error("Phone number must be unique");
           }
         } catch (error) {
-          console.log("bro where ?");
+          console.log("bro where ?", error);
         }
       }
     }
@@ -208,7 +235,7 @@ export default function Udarta() {
                 <span className="flex">
                   <span className="flex font-medium  w-[210px]">
                     {" "}
-                    Company Name(English)*{" "}
+                    Company Name(English)* :{" "}
                   </span>
                   <input
                     type="text"
@@ -219,17 +246,20 @@ export default function Udarta() {
                   />
                 </span>
                 <span className="flex">
-                  <span className="flex font-medium    w-[210px]">
+                  <span className="flex font-medium w-[210px]">
                     {" "}
                     Company Type* :{" "}
                   </span>
-                  <input
-                    type="text"
-                    placeholder="Enter Company Type"
+                  <select
                     value={type}
                     onChange={(e) => settype(e.target.value)}
-                    className="w-[25vw] py-2 rounded-md pl-2 outline-none"
-                  />
+                    className="py-2 rounded-md pl-2 outline-none"
+                    style={{ width: "25vw" }}
+                  >
+                    <option value="Online Business">Online Business</option>
+                    <option value="Hotel">Hotel</option>
+                    <option value="School">School</option>
+                  </select>
                 </span>
 
                 <span className="flex">
@@ -287,33 +317,32 @@ export default function Udarta() {
                 Your document
               </div>
               <div className="flex flex-col px-2 ">
-                {" "}
+                {compressedImg ? (
+                  <img
+                    src={URL.createObjectURL(compressedImg)}
+                    alt="Selected Document"
+                    className="p-5"
+                    style={{ maxHeight: "500px", maxWidth: "700px" }}
+                  />
+                ) : (
+                  editable &&
+                  ((
+                    <img
+                      src={`${document}`}
+                      height="400"
+                      width="400"
+                      alt="darta.jpg"
+                    />
+                  ) ||
+                    "")
+                )}
+                <br />
                 <span className="flex  items-center gap-5">
-                  {/* <input
-                    type="file"
-                    onChange={(event) => setdocument(event.target.files[0])}
-                    
-                  /> */}
-
                   <ImgCompressor
                     setCompressedFile={(file) => setCompressedImg(file)}
+                    editFile={document}
                   />
-
-                  {/* <MdDeleteForever
-                    className="w-[34px] h-[34px]  cursor-pointer hover:text-red-700"
-                    onClick={deletedocument}
-                  /> */}
                 </span>
-              </div>
-            </div>
-            <div className="flex flex-col bg-white gap-5">
-              <div className="bg-[#092169] text-white px-2 py-3">
-                Document Details
-              </div>
-              <div className="flex flex-col bg-white py-5 px-2 w-[900px] gap-5">
-                <div className="flex justify-between">
-                  <span>{document ? document.name : "No file selected"}</span>
-                </div>
               </div>
             </div>
 
@@ -321,7 +350,7 @@ export default function Udarta() {
               className="py-4 text-xl font-semibold bg-[#FFBB00] w-1/5 rounded-md "
               onClick={registerbusiness}
             >
-              Register Now
+              {editable ? "Update Register" : "Register"}
             </button>
           </div>
         </>
@@ -366,15 +395,24 @@ export default function Udarta() {
                   Document
                 </div>
                 <div className="flex justify-center">
-                  {compressedImg && (
-                    <div>
+                  {compressedImg ? (
+                    <img
+                      src={URL.createObjectURL(compressedImg)}
+                      alt="Selected Document"
+                      className="p-5"
+                      style={{ maxHeight: "500px", maxWidth: "700px" }}
+                    />
+                  ) : (
+                    editable &&
+                    ((
                       <img
-                        src={URL.createObjectURL(compressedImg)}
-                        alt="Selected Document"
-                        className="p-5"
-                        style={{ maxHeight: "500px", maxWidth: "700px" }}
+                        src={`${document}`}
+                        height="400"
+                        width="400"
+                        alt="darta.jpg"
                       />
-                    </div>
+                    ) ||
+                      "")
                   )}
                 </div>
               </div>
@@ -396,18 +434,6 @@ export default function Udarta() {
               </button>
             </div>
           </div>
-        </div>
-      )}
-      {dartaSuccess && (
-        <div className="flex mx-10 p-3 my-2 flex-col gap-7 justify-center items-center bg-white">
-          <div>
-            <p>
-              You have Successfully sent your company details. Please make a
-              payment for successfully register
-            </p>
-          </div>
-          <Payment />
-          {/* <small>Go to home page <Link to={<Profile />} /></small> */}
         </div>
       )}
     </Ulayout>

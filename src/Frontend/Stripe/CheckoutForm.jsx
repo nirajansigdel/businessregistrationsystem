@@ -79,7 +79,7 @@ const CheckoutForm = ({ clientSecret, packageData }) => {
         walletId: walletId,
         package: packageData.value,
         amount: isPayment.paymentIntent.amount,
-        dartaId: dartaDetail.dartaId,
+        dartaId: dartaDetail.id,
       };
       const addPayment = await postPaymentData(payload);
     }
@@ -89,11 +89,6 @@ const CheckoutForm = ({ clientSecret, packageData }) => {
     ) {
     }
     console.log(isPayment);
-    // if (error.type === "card_error" || error.type === "validation_error") {
-    //   setMessage(error.message);
-    // } else {
-    //   setMessage("An unexpected error occurred.");
-    // }
 
     setIsLoading(false);
   };
