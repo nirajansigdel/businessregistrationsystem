@@ -32,10 +32,10 @@ const Payment = () => {
     appearance,
   };
   const selectOptions = [
-    { label: "Monthly", value: "1", amount: 900 },
-    { label: "Quartely", value: "3", amount: 2500 },
-    { label: "Half Yearly", value: "6", amount: 4500 },
-    { label: "Yearly", value: "12", amount: 9000 },
+    { label: "Online Business", value: "Online Business", amount: 1500 },
+    { label: "School", value: "School", amount: 2500 },
+    { label: "Hotel", value: "Hotel", amount: 3000 },
+    { label: "Resort ", value: "Resort", amount: 2000 },
   ];
 
   const onHandlePackage = async (paymentType) => {
@@ -83,17 +83,17 @@ const Payment = () => {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
             >
               <option selected="">Select Package</option>
-              <option value="1" id="1">
-                Monthly Rs.900
+              <option value="Online Business" id="1">
+                Online Business Rs.1500
               </option>
-              <option value="3" id="2">
-                3 months Rs.2500
+              <option value="School" id="2">
+                School Rs.2500
               </option>
-              <option value="6" id="3">
-                6 months Rs.4500
+              <option value="Hotel" id="3">
+                 Hotel Rs.3000
               </option>
-              <option value="9" id="4">
-                Yearly Rs.9000
+              <option value="Resort" id="4">
+                Resort Rs.2000
               </option>
             </select>
             {error && (
