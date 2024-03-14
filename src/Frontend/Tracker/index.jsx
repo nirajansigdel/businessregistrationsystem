@@ -15,7 +15,7 @@ const ProgressTimeline = () => {
     if (email) {
       const verifyProgress = async () => {
         const dataProgress = await getDartaByEmail(email);
-        setProgress(dataProgress.data[0]);
+        if (dataProgress?.data?.length > 0) setProgress(dataProgress.data[0]);
       };
       verifyProgress();
     }
@@ -24,7 +24,7 @@ const ProgressTimeline = () => {
   console.log({ progress });
   return (
     <Ulayout>
-      {userDetail && email ? (
+      {progress ? (
         <>
           {" "}
           <Card title="Progress Tracker" className="mt-16">

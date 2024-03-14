@@ -22,6 +22,7 @@ export default function Udarta() {
   const [dartaSuccess, setDartaSuccess] = useState(false);
   const navigator = useNavigate();
   const dartaDetail = JSON.parse(localStorage.getItem("userProfile"));
+
   const [dartaEmail, setEmail] = useState(dartaDetail.email);
   const [dartaProfile, setDartaProfile] = useState(null);
   const [editable, setIsEditable] = useState(false);
@@ -30,8 +31,10 @@ export default function Udarta() {
     if (dartaEmail) {
       const getProfile = async () => {
         const profileData = await getDartaByEmail(dartaEmail);
-        setDartaProfile(profileData.data);
-        if (profileData?.data?.length) setIsEditable(true);
+        if (profileData?.data?.length) {
+          setDartaProfile(profileData.data);
+          setIsEditable(true);
+        }
       };
       getProfile();
     }
@@ -218,6 +221,10 @@ export default function Udarta() {
     }
   };
 
+  const showEditButton =
+    dartaProfile?.isFormVerified ||
+    dartaProfile?.isDocVerified ||
+    dartaProfile?.isPaymentVerified;
   return (
     <Ulayout>
       {!detail && !previous ? (
@@ -340,18 +347,33 @@ export default function Udarta() {
                 <span className="flex  items-center gap-5">
                   <ImgCompressor
                     setCompressedFile={(file) => setCompressedImg(file)}
-                    editFile={document}
+                    editFile={editable && showEditButton}
                   />
                 </span>
               </div>
             </div>
+            {}
 
-            <button
-              className="py-4 text-xl font-semibold bg-[#FFBB00] w-1/5 rounded-md "
-              onClick={registerbusiness}
-            >
-              {editable ? "Update Register" : "Register"}
-            </button>
+            {editable ? (
+              showEditButton && ""
+            ) : (
+              <button
+                className="py-4 text-xl font-semibold bg-[#FFBB00] w-1/5 rounded-md "
+                onClick={registerbusiness}
+              >
+                Update Register
+              </button>
+            )}
+            {!showEditButton && !editable ? (
+              <button
+                className="py-4 text-xl font-semibold bg-[#FFBB00] w-1/5 rounded-md "
+                onClick={registerbusiness}
+              >
+                Register
+              </button>
+            ) : (
+              ""
+            )}
           </div>
         </>
       ) : (

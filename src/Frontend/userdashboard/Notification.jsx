@@ -4,8 +4,8 @@ import Card from "../../components/Card";
 
 export default function Notification() {
   const [apiData, setApiData] = useState([]);
-  const dartaDetail = JSON.parse(localStorage.getItem("dartaDetails"));
-  const [email, setEmail] = useState(dartaDetail.Email);
+  const dartaDetail = JSON.parse(localStorage.getItem("userProfile"));
+  const [email, setEmail] = useState(dartaDetail.email);
 
   useEffect(() => {
     try {

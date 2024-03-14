@@ -3,14 +3,14 @@ import { getDartaByEmail } from "./api";
 import { Ulayout } from "../userdashboard/layout";
 
 export const Profile = () => {
-  const dartaDetail = JSON.parse(localStorage.getItem("dartaDetails"));
-  const [email, setEmail] = useState(dartaDetail.Email);
+  const dartaDetail = JSON.parse(localStorage.getItem("userProfile"));
+  const [email, setEmail] = useState(dartaDetail.email);
   const [dartaProfile, setDartaProfile] = useState(null);
   useEffect(() => {
     if (email) {
       const getProfile = async () => {
         const profileData = await getDartaByEmail(email);
-        setDartaProfile(profileData);
+        if (profileData?.data?.length > 0) setDartaProfile(profileData.data[0]);
       };
       getProfile();
     }
@@ -33,13 +33,13 @@ export const Profile = () => {
               <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Name</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {dartaDetail.name}
+                  {dartaProfile?.name}
                 </dd>
               </div>
               <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Type</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {dartaDetail.type}
+                  {dartaProfile?.type}
                 </dd>
               </div>
               <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -47,13 +47,13 @@ export const Profile = () => {
                   Email address
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {dartaDetail.Email}
+                  {dartaProfile?.Email}
                 </dd>
               </div>
               <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Phone</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {dartaDetail.Phone}
+                  {dartaProfile?.Phone}
                 </dd>
               </div>
               <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -61,7 +61,7 @@ export const Profile = () => {
                   Joined Date
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {dartaDetail.date}
+                  {dartaProfile?.date}
                 </dd>
               </div>
             </dl>

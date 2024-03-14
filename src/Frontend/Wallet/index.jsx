@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Ulayout } from "../userdashboard/layout";
 import { addWalletUser } from "./api";
 import Modal from "../../components/Modal";
 import Payment from "../Payment";
+import { getDartaByEmail } from "../Tracker/api";
 
 const AddWalletUser = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -14,6 +15,7 @@ const AddWalletUser = () => {
   const [errors, setErrors] = useState({});
   const userDetail = JSON.parse(localStorage.getItem("userProfile"));
   const [email, setEmail] = useState(userDetail.email);
+  const [dartaDetails, setDartaDetails] = useState(null);
 
   const handleInputChange = (event) => {
     const { value, name } = event.target;
@@ -49,10 +51,21 @@ const AddWalletUser = () => {
     return errors;
   };
 
+  useEffect(() => {
+    if (email) {
+      const verifyProgress = async () => {
+        const dataProgress = await getDartaByEmail(email);
+        if (dataProgress?.data?.length > 0)
+          setDartaDetails(dataProgress.data[0]);
+      };
+      verifyProgress();
+    }
+  }, [email]);
+
   return (
     <Ulayout>
       <div className="p-4">
-        {email ? (
+        {dartaDetails ? (
           <>
             {" "}
             <div>

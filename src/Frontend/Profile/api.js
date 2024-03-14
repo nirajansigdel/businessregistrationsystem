@@ -12,9 +12,9 @@ export const getDartaByEmail = async (email) => {
   );
   const responseMessage = await response.json();
   if (response.ok) {
-    toast.success(responseMessage.message);
+    // toast.success(responseMessage.message);
   } else {
-    toast.error(responseMessage.message);
+    // toast.error(responseMessage.message);
   }
   return responseMessage;
 };
