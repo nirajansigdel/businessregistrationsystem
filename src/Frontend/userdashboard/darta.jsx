@@ -221,10 +221,11 @@ export default function Udarta() {
     }
   };
 
-  const showEditButton =
-    dartaProfile?.isFormVerified ||
-    dartaProfile?.isDocVerified ||
-    dartaProfile?.isPaymentVerified;
+  const showEditButton =dartaProfile?.length>0 &&
+    dartaProfile[0]?.isFormVerified || 
+    dartaProfile[0]?.isDocVerified ||
+    dartaProfile[0]?.isPaymentVerified;
+    console.log( dartaProfile);
   return (
     <Ulayout>
       {!detail && !previous ? (
@@ -344,36 +345,45 @@ export default function Udarta() {
                     "")
                 )}
                 <br />
-                <span className="flex  items-center gap-5">
-                  <ImgCompressor
-                    setCompressedFile={(file) => setCompressedImg(file)}
-                    editFile={editable && showEditButton}
-                  />
-                </span>
+                {!showEditButton ? (
+                  <span className="flex  items-center gap-5">
+                    {" "}
+                    <ImgCompressor
+                      setCompressedFile={(file) => setCompressedImg(file)}
+                      editFile={editable}
+                    />
+                  {" "}
+                  </span>
+                ) : (
+                  ""
+                )}
+                {" "}
               </div>
+              {" "}
             </div>
-            {}
-
-            {editable ? (
-              showEditButton && ""
-            ) : (
+            {" "}
+            
+            {editable && !showEditButton && (
+              
+              
               <button
                 className="py-4 text-xl font-semibold bg-[#FFBB00] w-1/5 rounded-md "
                 onClick={registerbusiness}
               >
-                Update Register
+              
+                 Update Register {" "}
               </button>
             )}
-            {!showEditButton && !editable ? (
+            {" "}
+            {!editable && (
               <button
                 className="py-4 text-xl font-semibold bg-[#FFBB00] w-1/5 rounded-md "
                 onClick={registerbusiness}
               >
-                Register
+               Register {" "}
               </button>
-            ) : (
-              ""
             )}
+            
           </div>
         </>
       ) : (
