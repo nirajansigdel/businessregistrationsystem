@@ -26,6 +26,7 @@ export default function Udarta() {
   const [dartaEmail, setEmail] = useState(dartaDetail.email);
   const [dartaProfile, setDartaProfile] = useState(null);
   const [editable, setIsEditable] = useState(false);
+  const [showEditButton, setShowEditButton] = useState(false);
 
   useEffect(() => {
     if (dartaEmail) {
@@ -42,8 +43,18 @@ export default function Udarta() {
 
   useEffect(() => {
     if (dartaProfile && dartaProfile.length > 0) {
-      const { name, type, address, Phone, date, document, Email } =
-        dartaProfile[0];
+      const {
+        name,
+        type,
+        address,
+        Phone,
+        date,
+        document,
+        Email,
+        isFormVerified,
+        isDocVerified,
+        isPaymentVerified,
+      } = dartaProfile[0];
       setname(name);
       setemail(Email);
       setaddress(address);
@@ -51,9 +62,20 @@ export default function Udarta() {
       setphone(Phone);
       settype(type);
       setdocument(document);
+
+      console.log(!!isFormVerified);
+      const isShowEditButton =
+        !isFormVerified ||
+        !isDocVerified ||
+        !isPaymentVerified ||
+        isFormVerified === null ||
+        isDocVerified === null ||
+        isPaymentVerified === null;
+      setShowEditButton(isShowEditButton);
     }
   }, [dartaProfile]);
 
+  console.log({ showEditButton, editable });
   // for title only
   const titlename = [
     { id: 1, dname: "Company Name:" },
@@ -221,11 +243,7 @@ export default function Udarta() {
     }
   };
 
-  const showEditButton =dartaProfile?.length>0 &&
-    dartaProfile[0]?.isFormVerified || 
-    dartaProfile[0]?.isDocVerified ||
-    dartaProfile[0]?.isPaymentVerified;
-    console.log( dartaProfile);
+  console.log(dartaProfile);
   return (
     <Ulayout>
       {!detail && !previous ? (
@@ -242,8 +260,7 @@ export default function Udarta() {
               <div className="flex flex-col gap-4 px-2">
                 <span className="flex">
                   <span className="flex font-medium  w-[210px]">
-                    {" "}
-                    Company Name(English)* :{" "}
+                    Company Name(English)* :
                   </span>
                   <input
                     type="text"
@@ -255,8 +272,7 @@ export default function Udarta() {
                 </span>
                 <span className="flex">
                   <span className="flex font-medium w-[210px]">
-                    {" "}
-                    Company Type* :{" "}
+                    Company Type* :
                   </span>
                   <select
                     value={type}
@@ -272,7 +288,7 @@ export default function Udarta() {
 
                 <span className="flex">
                   <span className="flex font-medium w-[210px]">
-                    Company Address* :{" "}
+                    Company Address* :
                   </span>
                   <input
                     type="text"
@@ -284,7 +300,7 @@ export default function Udarta() {
                 </span>
                 <span className="flex">
                   <span className="flex font-medium   w-[210px]">
-                    Company Phone Number :{" "}
+                    Company Phone Number :
                   </span>
                   <input
                     type="text"
@@ -296,7 +312,7 @@ export default function Udarta() {
                 </span>
                 <span className="flex">
                   <span className="flex font-medium w-[210px] ">
-                    Company Email Address* :{" "}
+                    Company Email Address* :
                   </span>
                   <input
                     type="text"
@@ -308,7 +324,7 @@ export default function Udarta() {
                 </span>
                 <span className="flex">
                   <span className="flex font-medium w-[210px] ">
-                    Issues Date* :{" "}
+                    Issues Date* :
                   </span>
                   <input
                     type="text"
@@ -345,45 +361,34 @@ export default function Udarta() {
                     "")
                 )}
                 <br />
-                {!showEditButton ? (
+                {showEditButton || !editable ? (
                   <span className="flex  items-center gap-5">
-                    {" "}
                     <ImgCompressor
                       setCompressedFile={(file) => setCompressedImg(file)}
                       editFile={editable}
                     />
-                  {" "}
                   </span>
                 ) : (
                   ""
                 )}
-                {" "}
               </div>
-              {" "}
             </div>
-            {" "}
-            
-            {editable && !showEditButton && (
-              
-              
+            {editable && showEditButton && (
               <button
                 className="py-4 text-xl font-semibold bg-[#FFBB00] w-1/5 rounded-md "
                 onClick={registerbusiness}
               >
-              
-                 Update Register {" "}
+                Update Register
               </button>
             )}
-            {" "}
             {!editable && (
               <button
                 className="py-4 text-xl font-semibold bg-[#FFBB00] w-1/5 rounded-md "
                 onClick={registerbusiness}
               >
-               Register {" "}
+                Register
               </button>
             )}
-            
           </div>
         </>
       ) : (
@@ -462,7 +467,7 @@ export default function Udarta() {
                 className="py-2 px-6 text-xl font-semibold bg-[#FFBB00]  rounded-md "
                 onClick={submitconfirm}
               >
-                Confirm{" "}
+                Confirm
               </button>
             </div>
           </div>
